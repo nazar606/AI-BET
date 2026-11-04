@@ -17,6 +17,7 @@ if (!publicUrl) {
 }
 
 const bot = new Bot(token);
+await bot.init();
 const app = express();
 app.use(express.json());
 
