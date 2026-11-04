@@ -96,16 +96,22 @@ async function show(section) {
         return;
       }
 
-      content.innerHTML = events.map(event => `
+      content.innerHTML = events.map((event, index) => `
         <div class="match">
-          <b>${event.strEvent || "Матч"}</b><br
-        🏆 ${event.strLeague || event.strSport || "Спорт"}
+          <b>${event.strEvent || "Матч"}</b>
 
-       📅 ${event.dateEvent || ""}
+          🏆 ${event.strLeague || event.strSport || "Спорт"}<
+          📅 ${event.dateEvent || ""}<b
+         🕒 ${event.strTime || "Время неизвестно"}<br
 
-      🕒 ${event.strTime || "Время неизвестно"}
+        <button onclick="analyzeMatch(${index})">
+            🤖 АНАЛИЗИРОВАТЬ
+          </button>
+          <div id="analysis-${index}"></div>
         </div>
       `).join("");
+
+      window.currentEvents = events;
 
     } catch (error) {
       content.innerText = "❌ Не удалось загрузить матчи. Попробуй позже.";
@@ -114,10 +120,13 @@ async function show(section) {
   }
 
   const messages = {
-    analysis: "🤖 Здесь будут AI-прогнозы.",
+    analysis: "🤖 Выбери матч в разделе Матчи.",
     stats: "📊 Здесь будет статистика.",
     profile: "👤 Твой профиль AI BET."
   };
+
+  content.innerText = messages[section] || "Раздел";
+}
 
   content.innerText = messages[section] || "Раздел";
 }
