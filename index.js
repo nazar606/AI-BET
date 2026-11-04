@@ -55,9 +55,8 @@ async function getSportsEvents() {
   return allEvents;
 }
 
-  const data = await response.json();
-  return data.events || [];
-}
+  
+  
 
 bot.command("start", async (ctx) => {
   await ctx.reply(
