@@ -91,22 +91,19 @@ button span {
 </section>
 
 <div class="grid">
-  <button onclick="alert('КНОПКА РАБОТАЕТ')">
-  ТЕСТ КНОПКИ
-</button>
-  <button type="button" data-section="matches">
+  <button type="button" onclick="show('matches')">
     <span>⚽</span>Матчи
   </button>
 
-  <button type="button" data-section="analysis">
+  <button type="button" onclick="show('analysis')">
     <span>🤖</span>AI-прогнозы
   </button>
 
-  <button type="button" data-section="stats">
+  <button type="button" onclick="show('stats')">
     <span>📊</span>Статистика
   </button>
 
-  <button type="button" data-section="profile">
+  <button type="button" onclick="show('profile')">
     <span>👤</span>Профиль
   </button>
 </div>
