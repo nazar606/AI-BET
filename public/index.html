@@ -179,7 +179,7 @@ window.analyzeMatch = async function(index) {
 
   if (!event || !result) return;
 
-  result.innerHTML = "⏳ Анализируем матч...";
+  result.innerHTML = "⏳ Анализируем...";
 
   try {
     const response = await fetch("/api/analyze", {
@@ -200,37 +200,17 @@ window.analyzeMatch = async function(index) {
       throw new Error(data.error || "Ошибка анализа");
     }
 
-    result.innerHTML = `
-      
+    result.innerHTML =
+      "
 <b>📊 Вероятность исходов:</b><
-      ${data.probabilities}
-    `;
+ +
+      data.probabilities;
 
   } catch (error) {
     console.error(error);
     result.innerText = "❌ Ошибка анализа. Проверь OpenAI API.";
   }
 };
-  
-
-    result.innerHTML = `
-      
-<b>📊 В
-тность исходов:</b>
-
-      
-ta.probabilities}
-    `;
-
-  } catch (error) {
-    console
-
-
-(error);
-    result.innerText = "❌ Ошибка анализа. Проверь OpenAI API.";
-  }
-}
 </script>
-
 </body>
 </html>.error
