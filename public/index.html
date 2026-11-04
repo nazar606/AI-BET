@@ -91,19 +91,19 @@ button span {
 </section>
 
 <div class="grid">
-  <button onclick="show('matches')">
+  <button type="button" data-section="matches">
     <span>⚽</span>Матчи
   </button>
 
-  <button onclick="show('analysis')">
+  <button type="button" data-section="analysis">
     <span>🤖</span>AI-прогнозы
   </button>
 
-  <button onclick="show('stats')">
+  <button type="button" data-section="stats">
     <span>📊</span>Статистика
   </button>
 
-  <button onclick="show('profile')">
+  <button type="button" data-section="profile">
     <span>👤</span>Профиль
   </button>
 </div>
@@ -113,13 +113,23 @@ button span {
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+}
+
+const content = document.getElementById("content");
+window.currentEvents = [];
+
+document.querySelectorAll("[data-section]").forEach(button => {
+  button.addEventListener("click", () => {
+    show(button.dataset.section);
+  });
+});
 
 async function show(section) {
-  const content = document.getElementById("content");
-
   if (section === "matches") {
     content.innerHTML = "⏳ Загружаем матчи...";
 
@@ -127,12 +137,12 @@ async function show(section) {
       const response = await fetch("/api/matches");
 
       if (!response.ok) {
-        throw new Error("Ошибка загрузки матчей");
+        throw new Error("Ошибка загрузки матчей: " + response.status);
       }
 
       const events = await response.json();
 
-      if (!events.length) {
+      if (!Array.isArray(events) || events.length === 0) {
         content.innerText = "Сегодня матчей не найдено.";
         return;
       }
@@ -148,7 +158,7 @@ async function show(section) {
 
       🕒 ${event.strTime || "Время неизвестно"}
 
-      <button type="button" onclick="window.analyzeMatch(${index})">
+          <button type="button" class="analyze-button" data-index="${index}">
             🤖 АНАЛИЗИРОВАТЬ
           </button>
 
@@ -156,9 +166,15 @@ async function show(section) {
         </div>
       `).join("");
 
+      document.querySelectorAll(".analyze-button").forEach(button => {
+        button.addEventListener("click", () => {
+          analyzeMatch(Number(button.dataset.index));
+        });
+      });
+
     } catch (error) {
       console.error(error);
-      content.innerText = "❌ Не удалось загрузить матчи. Попробуй позже.";
+      content.innerText = "❌ Не удалось загрузить матчи. " + error.message;
     }
 
     return;
@@ -173,16 +189,19 @@ async function show(section) {
   content.innerText = messages[section] || "Раздел";
 }
 
-window.analyzeMatch = async function(index) {
-  const event = window.currentEvents?.[index];
-  const result = document.getElementById(`analysis-${index}`);
+async function analyzeMatch(index) {
+  const event = window.currentEvents[index];
+  const result = document.getElementById("analysis-" + index);
 
   if (!event || !result) return;
 
-  result.innerHTML = "⏳ Анализируем...";
+  result.innerText = "⏳ Анализируем...";
 
   try {
-    const response = await fetch("/api/analyze", {
+    const response = await fetch("/api
+
+
+analyze", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -202,15 +221,20 @@ window.analyzeMatch = async function(index) {
 
     result.innerHTML =
       "
-<b>📊 Вероятность исходов:</b><
- +
-      data.probabilities;
+<b>📊 В
+тность исходов:</b>
+" +
+   
+tring(data.probabilities || "Нет результата").replace(/\n/g, "
+");
 
-  } catch (error) {
+  
+tch (error) {
     console.error(error);
-    result.innerText = "❌ Ошибка анализа. Проверь OpenAI API.";
+    result.innerText = "❌ Ошибка анализа: " + error.message;
   }
-};
+}
 </script>
+
 </body>
-</html>
+</html>/
