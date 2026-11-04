@@ -130,6 +130,40 @@ async function show(section) {
 
   content.innerText = messages[section] || "Раздел";
 }
+  async function analyzeMatch(index) {
+  const event = window.currentEvents[index];
+  const result = document.getElementById(`analysis-${index}`);
+
+  result.innerHTML = "⏳ Анализируем матч...";
+
+  try {
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        match: event.strEvent,
+        sport: event.strSport,
+        league: event.strLeague
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Ошибка анализа");
+    }
+
+    result.innerHTML = `
+      <b>📊 Вероятность победы:</b><
+      ${data.probabilities}
+    `;
+
+  } catch (error) {
+    result.innerText = "❌ Не удалось выполнить анализ.";
+  }
+}
 </script>
 </body>
 </html>
