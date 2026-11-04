@@ -88,15 +88,48 @@
     tg.ready();
     tg.expand();
 
-    function show(section) {
-      const messages = {
-        matches: "⚽ Здесь будут спортивные матчи.",
-        analysis: "🤖 Здесь будут AI-прогнозы.",
-        stats: "📊 Здесь будет статистика.",
-        profile: "👤 Твой профиль AI BET."
-      };
+    async function show(section) {
+  const content = document.getElementById("content");
 
-      document.getElementById("content").innerText =
+  if (section === "matches") {
+    content.innerHTML = "⏳ Загружаем футбольные и хоккейные матчи...";
+
+    try {
+      const response = await fetch("/api/matches");
+      const events = await response.json();
+
+      if (!events.length) {
+        content.innerHTML = "Сегодня матчей не найдено.";
+        return;
+      }
+
+      content.innerHTML = events.map(event => `
+        <div style="padding:12px;margin-bottom:10px;background:#263d5c;border-radius:12px">
+          <b>${event.strEvent || "Матч"}</b>
+
+          🏆 ${event.strLeague || event.strSport || "Спорт"}<
+          📅 ${event.dateEvent || ""}<b
+         🕒 ${event.strTime || "Время неизвестно"}
+        </div>
+      `).join("");
+
+    } catch (error) {
+      content.innerHTML = "❌ Ошибка загрузки матчей.";
+    }
+
+    return;
+  }
+
+  const messages = {
+    analysis: "🤖 Здесь будут AI-прогнозы.",
+    stats: "📊 Здесь будет статистика.",
+    profile: "👤 Твой профиль AI BET."
+  };
+
+  content.innerText = messages[section] || "Раздел";
+}
+
+      
         messages[section] || "Раздел";
     }
   </script>
