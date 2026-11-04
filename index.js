@@ -32,6 +32,43 @@ app.get("/api/matches", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+app.post("/api/analyze", async (req, res) => {
+  try {
+    if (!openai) {
+      return res.status(503).json({
+        error: "OpenAI API не подключён или нет средств на балансе."
+      });
+    }
+
+    const { match, sport, league } = req.body;
+
+    if (!match) {
+      return res.status(400).json({ error: "Не указан матч." });
+    }
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-5",
+      messages: [
+        {
+          role: "system",
+          content: "Ты спортивный аналитик. Оцени вероятности исходов матча в процентах. Не выдумывай точные статистические данные. Если информации недостаточно, честно сообщи об этом. Вероятности должны в сумме составлять 100%."
+        },
+        {
+          role: "user",
+          content: `Оцени вероятности исходов матча: ${match}. Вид спорта: ${sport || "не указан"}. Лига: ${league || "не указана"}. Верни только проценты вероятностей победы каждой команды и ничьей, если она возможна.`
+        }
+      ]
+    });
+
+    res.json({
+      probabilities: completion.choices[0].message.content
+    });
+
+  } catch (error) {
+    console.error("Ошибка AI-анализа:", error);
+    res.status(500).json({ error: "Не удалось выполнить анализ." });
+  }
+});
 
 const menu = new InlineKeyboard()
   .text("⚽ Спортивные прогнозы", "predictions").row()
