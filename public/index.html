@@ -91,9 +91,25 @@ button span {
 </section>
 
 <div class="grid">
-  <button type="button" onclick="document.getElementById('content').innerText='⏳ Загружаем матчи...' ; fetch('/api/matches').then(r=>r.json()).then(events=>{document.getElementById('content').innerText=events.map(e=>e.strEvent).join('\n') || 'Матчей нет'}).catch(()=>document.getElementById('content').innerText='Ошибка загрузки матчей')">
-    <span>⚽</span>Матчи
-  </button>
+  <button type="button" onclick="
+document.getElementById('content').innerHTML='⏳ Загружаем матчи...';
+fetch('/api/matches')
+.then(r=>r.json())
+.then(events=>{
+window.currentEvents=events;
+document.getElementById('content').innerHTML=events.map((e,i)=>`
+<div class='match'>
+<b>${e.strEvent}</b>
+
+<button type='button' onclick='analyzeMatch(${i})'>🤖 АНАЛИЗИРОВАТЬ</button>
+<div id='analysis-${i}'></div>
+</div>
+`).join('');
+})
+.catch(()=>document.getElementById('content').innerText='Ошибка загрузки матчей');
+">
+<span>⚽</span>Матчи
+</button>
 
   <button type="button" onclick="document.getElementById('content').innerText='🤖 Сначала открой раздел Матчи и выбери матч.'">
     <span>🤖</span>AI-прогнозы
