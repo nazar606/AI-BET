@@ -140,7 +140,7 @@ document.querySelectorAll("[data-section]").forEach(button => {
   });
 });
 
-async function show(section) {
+window.show = async function(section) {
   if (section === "matches") {
     content.innerHTML = "⏳ Загружаем матчи...";
 
@@ -191,7 +191,7 @@ async function show(section) {
   };
 
   content.innerText = messages[section] || "Раздел";
-}
+};
 
 async function analyzeMatch(index) {
   const event = window.currentEvents[index];
