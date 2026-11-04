@@ -21,6 +21,7 @@ const openai = openaiKey ? new OpenAI({ apiKey: openaiKey }) : null;
 
 const app = express();
 app.use(express.json());
+app.use(express.static("public"));
 
 const menu = new InlineKeyboard()
   .text("⚽ Спортивные прогнозы", "predictions").row()
