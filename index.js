@@ -1,4 +1,5 @@
 import express from "express";
+import openai from "openai";
 import crypto from "node:crypto";
 import { Bot, InlineKeyboard } from "grammy";
 
@@ -14,6 +15,9 @@ if (!token || !publicUrl) {
 }
 
 const bot = new Bot(token);
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 await bot.init();
 
 const app = express();
@@ -43,28 +47,35 @@ bot.command("start", async (ctx) => {
   );
 });
 
-bot.callbackQuery("predictions", async (ctx) => {
+bot.callbackQuery("analysis", async (ctx) => {
   await ctx.answerCallbackQuery();
 
   try {
     const events = await getSportsEvents();
 
     if (!events.length) {
-      return ctx.reply("На сегодня в спортивной базе событий не найдено. Попробуй позже.");
+      return ctx.reply("Сегодня не найдено матчей для анализа.");
     }
 
-    const list = events.slice(0, 15).map((event, index) => {
-      const time = event.strTime || "Время не указано";
-      const homeScore = event.intHomeScore;
-      const awayScore = event.intAwayScore;
-      const score =
-        homeScore !== null && awayScore !== null
-          ? ` | Счёт: ${homeScore}:${awayScore}`
-          : "";
+    const matches = events.slice(0, 10).map((event) => ({
+      match: event.strEvent,
+      league: event.strLeague,
+      date: event.dateEvent,
+      time: event.strTime
+    }));
 
-      return `${index + 1}. ${event.strEvent || "Матч"}\n🏆 ${event.strLeague || event.strSport || "Спорт"}\n🕒 ${time}${score}`;
+    const response = await openai.responses.create({
+      model: "gpt-5",
+      instructions: "Ты спортивный аналитик AI BET. Анализируй только предоставленные данные. Не выдумывай статистику, форму команд, травмы и вероятности. Если данных недостаточно, прямо скажи об этом. Не обещай выигрыш и не призывай ставить деньги.",
+      input: `Проанализируй список спортивных событий. Укажи, какие матчи доступны и каких данных не хватает для полноценного прогноза:\n${JSON.stringify(matches, null, 2)}`
     });
 
+    await ctx.reply("🤖 AI-АНАЛИЗ AI BET\n\n" + response.output_text);
+  } catch (error) {
+    console.error("AI analysis error:", error);
+    await ctx.reply("Не удалось выполнить AI-анализ. Проверь API-ключ и баланс OpenAI API.");
+  }
+});
     await ctx.reply(
       `⚽ СОБЫТИЯ НА ${new Date().toLocaleDateString("ru-RU")}\n\n${list.join("\n\n")}\n\nЭто расписание событий, не готовые прогнозы.`
     );
