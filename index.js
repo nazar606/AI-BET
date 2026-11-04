@@ -205,9 +205,9 @@ bot.callbackQuery("profile", async (ctx) => {
 });
 
 app.get("/", (_req, res) => {
-
-
-res.status(200).send("AI BET bot is running.");
+  res.sendFile("index.html", {
+    root: "public"
+  });
 });
 
 app.get("/health", (_req, res) => {
