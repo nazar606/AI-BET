@@ -84,8 +84,8 @@ async function getSportsEvents() {
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error("Sports API unavailable");
-  }
+  throw new Error("Sports API unavailable: " + response.status);
+}
 
   const data = await response.json();
 
