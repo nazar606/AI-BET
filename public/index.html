@@ -251,6 +251,45 @@ async function analyzeMatch(index) {
   }
 }
 </script>
+<script>
+window.analyzeMatch = async function(index) {
+  const event = window.currentEvents[index];
+  const result = document.getElementById("analysis-" + index);
 
+  if (!event || !result) return;
+
+  result.innerText = "⏳ Анализируем...";
+
+  try {
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        match: event.strEvent,
+        sport: event.strSport,
+        league: event.strLeague
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Ошибка анализа");
+    }
+
+    result.innerHTML =
+      "
+<b>📊 Вероятность исходов:</b><
+ +
+      String(data.probabilities || "Нет результата").replace(/\n/g, "<
+);
+
+  } catch (error) {
+    result.innerText = "❌ Ошибка анализа: " + error.message;
+  }
+};
+</script>
 </body>
 </html>/
