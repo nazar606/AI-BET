@@ -96,6 +96,8 @@ async function show(section) {
         return;
       }
 
+      window.currentEvents = events;
+
       content.innerHTML = events.map((event, index) => `
         <div class="match">
           <b>${event.strEvent || "Матч"}</b>
@@ -111,10 +113,8 @@ async function show(section) {
         </div>
       `).join("");
 
-      window.currentEvents = events;
-
     } catch (error) {
-      content.innerText = "❌ Не удалось загрузить матчи. Попробуй позже.";
+      content.innerText = "❌ Не удалось загрузить матчи.";
     }
     return;
   }
@@ -128,9 +128,7 @@ async function show(section) {
   content.innerText = messages[section] || "Раздел";
 }
 
-  content.innerText = messages[section] || "Раздел";
-}
-  async function analyzeMatch(index) {
+async function analyzeMatch(index) {
   const event = window.currentEvents[index];
   const result = document.getElementById(`analysis-${index}`);
 
@@ -151,19 +149,16 @@ async function show(section) {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || "Ошибка анализа");
-    }
+    if (!response.ok) throw new Error(data.error);
 
     result.innerHTML = `
-      <b>📊 Вероятность победы:</b><
-      ${data.probabilities}
+      <b>📊 Вероятность:</b>
+
+   
+{data.probabilities}
     `;
 
   } catch (error) {
-    result.innerText = "❌ Не удалось выполнить анализ.";
+    result.innerText = "❌ Ошибка анализа. Проверь API.";
   }
 }
-</script>
-</body>
-</html>
