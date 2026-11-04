@@ -123,6 +123,17 @@ if (tg) {
 const content = document.getElementById("content");
 window.currentEvents = [];
 
+<script>
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+}
+
+const content = document.getElementById("content");
+window.currentEvents = [];
+
 document.querySelectorAll("[data-section]").forEach(button => {
   button.addEventListener("click", () => {
     show(button.dataset.section);
@@ -135,10 +146,7 @@ async function show(section) {
 
     try {
       const response = await fetch("/api/matches");
-
-      if (!response.ok) {
-        throw new Error("Ошибка загрузки матчей: " + response.status);
-      }
+      if (!response.ok) throw new Error("Ошибка загрузки: " + response.status);
 
       const events = await response.json();
 
@@ -151,17 +159,14 @@ async function show(section) {
 
       content.innerHTML = events.map((event, index) => `
         <div class="match">
-          <b>${event.strEvent || "Матч"}</b><br
-        🏆 ${event.strLeague || event.strSport || "Спорт"}
+          <b>${event.strEvent || "Матч"}</b>
 
-       📅 ${event.dateEvent || ""}
-
-      🕒 ${event.strTime || "Время неизвестно"}
-
+          🏆 ${event.strLeague || event.strSport || "Спорт"}<
+          📅 ${event.dateEvent || ""}<b
+         🕒 ${event.strTime || "Время неизвестно"}
           <button type="button" class="analyze-button" data-index="${index}">
             🤖 АНАЛИЗИРОВАТЬ
           </button>
-
           <div id="analysis-${index}"></div>
         </div>
       `).join("");
@@ -174,9 +179,8 @@ async function show(section) {
 
     } catch (error) {
       console.error(error);
-      content.innerText = "❌ Не удалось загрузить матчи. " + error.message;
+      content.innerText = "❌ Ошибка: " + error.message;
     }
-
     return;
   }
 
@@ -198,10 +202,7 @@ async function analyzeMatch(index) {
   result.innerText = "⏳ Анализируем...";
 
   try {
-    const response = await fetch("/api
-
-
-analyze", {
+    const response = await fetch("/api/analyze", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -221,15 +222,14 @@ analyze", {
 
     result.innerHTML =
       "
-<b>📊 В
-тность исходов:</b>
+<b>
+роятность исходов:</b>
 " +
-   
-tring(data.probabilities || "Нет результата").replace(/\n/g, "
+
+  String(data.probabilities || "Нет результата").replace(/\n/g, "
 ");
 
-  
-tch (error) {
+ catch (error) {
     console.error(error);
     result.innerText = "❌ Ошибка анализа: " + error.message;
   }
