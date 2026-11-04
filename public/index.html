@@ -173,7 +173,7 @@ async function show(section) {
   content.innerText = messages[section] || "Раздел";
 }
 
-async function analyzeMatch(index) {
+window.analyzeMatch = async function(index) {
   const event = window.currentEvents?.[index];
   const result = document.getElementById(`analysis-${index}`);
 
@@ -199,6 +199,19 @@ async function analyzeMatch(index) {
     if (!response.ok) {
       throw new Error(data.error || "Ошибка анализа");
     }
+
+    result.innerHTML = `
+      
+<b>📊 Вероятность исходов:</b><
+      ${data.probabilities}
+    `;
+
+  } catch (error) {
+    console.error(error);
+    result.innerText = "❌ Ошибка анализа. Проверь OpenAI API.";
+  }
+};
+  
 
     result.innerHTML = `
       
