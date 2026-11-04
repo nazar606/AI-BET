@@ -44,8 +44,19 @@ async function getSportsEvents() {
 
 bot.command("start", async (ctx) => {
   await ctx.reply(
-    "🤖 Добро пожаловать в AI BET!\n\nВыбери нужный раздел:",
-    { reply_markup: menu }
+    "🤖 Добро пожаловать в AI BET!\n\nНажми кнопку ниже, чтобы открыть приложение:",
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "⚡ ОТКРЫТЬ AI BET",
+              web_app: { url: process.env.RENDER_EXTERNAL_URL }
+            }
+          ]
+        ]
+      }
+    }
   );
 });
 
