@@ -91,21 +91,21 @@ button span {
 </section>
 
 <div class="grid">
-  <button type="button" onclick="show('matches')">
+  <button type="button" onclick="document.getElementById('content').innerText='⏳ Загружаем матчи...' ; fetch('/api/matches').then(r=>r.json()).then(events=>{document.getElementById('content').innerText=events.map(e=>e.strEvent).join('\n') || 'Матчей нет'}).catch(()=>document.getElementById('content').innerText='Ошибка загрузки матчей')">
     <span>⚽</span>Матчи
   </button>
 
-  <button type="button" onclick="show('analysis')">
+  <button type="button" onclick="document.getElementById('content').innerText='🤖 Сначала открой раздел Матчи и выбери матч.'">
     <span>🤖</span>AI-прогнозы
   </button>
 
-  <button type="button" onclick="show('stats')">
+  <button type="button" onclick="document.getElementById('content').innerText='📊 Здесь будет статистика.'">
     <span>📊</span>Статистика
   </button>
 
-  <button type="button" onclick="document.getElementById('content').innerText='Твой профиль AI BET'">
-  <span>👤</span>Профиль
-</button>
+  <button type="button" onclick="document.getElementById('content').innerText='👤 Твой профиль AI BET.'">
+    <span>👤</span>Профиль
+  </button>
 </div>
 
 <div class="content" id="content">
