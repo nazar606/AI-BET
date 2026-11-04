@@ -6,10 +6,7 @@ import { Bot, InlineKeyboard } from "grammy";
 const token = process.env.BOT_TOKEN;
 const publicUrl = process.env.RENDER_EXTERNAL_URL;
 const openaiKey = process.env.OPENAI_API_KEY;
-
-const webhookSecret =
-  process.env.WEBHOOK_SECRET || crypto.randomBytes(24).toString("hex");
-
+const webhookSecret = process.env.WEBHOOK_SECRET || crypto.randomBytes(24).toString("hex");
 const port = process.env.PORT || 3000;
 
 if (!token || !publicUrl) {
@@ -20,9 +17,7 @@ if (!token || !publicUrl) {
 const bot = new Bot(token);
 await bot.init();
 
-const openai = openaiKey
-  ? new OpenAI({ apiKey: openaiKey })
-  : null;
+const openai = openaiKey ? new OpenAI({ apiKey: openaiKey }) : null;
 
 const app = express();
 app.use(express.json());
@@ -35,10 +30,7 @@ const menu = new InlineKeyboard()
 
 async function getSportsEvents() {
   const date = new Date().toISOString().slice(0, 10);
-
-  const url =
-    `https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${date}`;
-
+  const url = `https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${date}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -49,7 +41,6 @@ async function getSportsEvents() {
   return data.events || [];
 }
 
-// Главное меню
 bot.command("start", async (ctx) => {
   await ctx.reply(
     "🤖 Добро пожаловать в AI BET!\n\nВыбери нужный раздел:",
@@ -57,7 +48,6 @@ bot.command("start", async (ctx) => {
   );
 });
 
-// Спортивные события
 bot.callbackQuery("predictions", async (ctx) => {
   await ctx.answerCallbackQuery();
 
@@ -69,18 +59,16 @@ bot.callbackQuery("predictions", async (ctx) => {
     }
 
     const list = events.slice(0, 15).map((event, index) => {
-      return (
-        `${index + 1}. ${event.strEvent || "Матч"}\n` +
+      return `${index + 1}. ${event.strEvent || "Матч"}\n` +
         `🏆 ${event.strLeague || event.strSport || "Спорт"}\n` +
         `📅 ${event.dateEvent || "Дата неизвестна"}\n` +
-        `🕒 ${event.strTime || "Время неизвестно"}`
-      );
+        `🕒 ${event.strTime || "Время неизвестно"}`;
     });
 
     await ctx.reply(
       "⚽ СПОРТИВНЫЕ СОБЫТИЯ\n\n" +
       list.join("\n\n") +
-      "\n\nДанные предоставлены спортивной базой. Это не готовые прогнозы."
+      "\n\nЭто список событий, а не гарантированные прогнозы."
     );
   } catch (error) {
     console.error("Sports API error:", error);
@@ -88,7 +76,6 @@ bot.callbackQuery("predictions", async (ctx) => {
   }
 });
 
-// AI-анализ
 bot.callbackQuery("analysis", async (ctx) => {
   await ctx.answerCallbackQuery();
 
@@ -108,22 +95,19 @@ bot.callbackQuery("analysis", async (ctx) => {
       league: event.strLeague,
       sport: event.strSport,
       date: event.dateEvent,
-      time: event.strTime,
-      homeScore: event.intHomeScore,
-      awayScore: event.intAwayScore
+      time: event.strTime
     }));
 
     const response = await openai.responses.create({
       model: "gpt-5",
       instructions:
         "Ты спортивный аналитик AI BET. Анализируй только переданные данные. " +
-        "Не придумывай статистику, травмы, форму команд и вероятности. " +
-        "Объясняй, каких данных не хватает для качественного анализа. " +
-        "Не обещай выигрыш и не представляй предположения как факты.",
+        "Не выдумывай статистику, травмы, форму команд и вероятности. " +
+        "Объясняй, каких данных не хватает. Не обещай выигрыш.",
       input:
-        "Проанализируй следующие спортивные события:\n" +
+        "Проанализируй спортивные события:\n" +
         JSON.stringify(matches, null, 2) +
-        "\nВыдели интересные матчи и объясни, какие дополнительные данные нужны для полноценного анализа."
+        "\nВыдели интересные матчи и объясни, каких данных не хватает для полноценного анализа."
     });
 
     await ctx.reply(
@@ -138,46 +122,35 @@ bot.callbackQuery("analysis", async (ctx) => {
   }
 });
 
-// История
 bot.callbackQuery("history", async (ctx) => {
   await ctx.answerCallbackQuery();
   await ctx.reply("📜 История прогнозов пока пуста.");
 });
 
-// Профиль
-bot.callbackQuery("profile
-
-
-, async (ctx) => {
+bot.callbackQuery("profile", async (ctx) => {
   await ctx.answerCallbackQuery();
 
-  const name = [
-    ctx.from.first_name,
-    ctx.from.last_name
-  ].filter(Boolean).join(" ");
+  const name = [ctx.from.first_name, ctx.from.last_name]
+    .filter(Boolean)
+    .join(" ");
 
   await ctx.reply(
     `👤 ПРОФИЛЬ\n\nИмя: ${name || "Пользователь"}\nTelegram ID: ${ctx.from.id}`
   );
 });
 
-// Проверка сервера
 app.get("/", (_req, res) => {
-  res.status(200).send("AI BET bot is running.");
+
+
+.status(200).send("AI BET bot is running.");
 });
 
 app.get("/health", (_req, res) => {
-  res.status(200).json({
-    ok: true,
-    app: "AI BET"
-  });
+  res.status(200).json({ ok: true, app: "AI BET" });
 });
 
-// Telegram webhook
 app.post("/telegram-webhook", async (req, res) => {
-  const receivedSecret = req.get(
-    "X-Telegram-Bot-Api-Secret-Token"
-  );
+  const receivedSecret = req.get("X-Telegram-Bot-Api-Secret-Token");
 
   if (receivedSecret !== webhookSecret) {
     return res.sendStatus(403);
@@ -192,19 +165,15 @@ app.post("/telegram-webhook", async (req, res) => {
   }
 });
 
-// Запуск
 async function start() {
   app.listen(port, async () => {
     console.log(`AI BET server listening on port ${port}`);
 
     try {
-      await bot.api.setWebhook(
-        `${publicUrl}/telegram-webhook`,
-        {
-          secret_token: webhookSecret,
-          drop_pending_updates: true
-        }
-      );
+      await bot.api.setWebhook(`${publicUrl}/telegram-webhook`, {
+        secret_token: webhookSecret,
+        drop_pending_updates: true
+      });
 
       console.log("Telegram webhook configured.");
     } catch (error) {
@@ -214,9 +183,4 @@ async function start() {
   });
 }
 
-start();
-
-
-
-
-
+start(); res
