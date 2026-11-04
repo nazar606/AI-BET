@@ -23,6 +23,16 @@ const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 
+app.get("/api/matches", async (req, res) => {
+  try {
+    const events = await getSportsEvents();
+    res.json(events);
+  } catch (error) {
+    console.error("Ошибка матчей:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 const menu = new InlineKeyboard()
   .text("⚽ Спортивные прогнозы", "predictions").row()
   .text("📊 AI-анализ матча", "analysis").row()
