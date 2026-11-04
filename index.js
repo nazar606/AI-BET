@@ -31,12 +31,29 @@ const menu = new InlineKeyboard()
 
 async function getSportsEvents() {
   const date = new Date().toISOString().slice(0, 10);
-  const url = `https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${date}`;
-  const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Sports API unavailable");
+  const sports = ["Soccer", "Ice Hockey"];
+  let allEvents = [];
+
+  for (const sport of sports) {
+    const url = `https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${date}&s=${sport}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+
+      const data = await response.json();
+
+      if (data.events) {
+        allEvents.push(...data.events);
+      }
+    } catch (error) {
+      console.log("Ошибка загрузки:", sport, error.message);
+    }
   }
+
+  return allEvents;
+}
 
   const data = await response.json();
   return data.events || [];
