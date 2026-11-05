@@ -206,15 +206,15 @@ window.analyzeMatch = async function(index) {
 
     result.innerHTML =
       "
+<b>📊 Вероятность исходов:</b><
+ +
+      String(data.probabilities || "Нет результата").replace(/\n/g, "<
+);
 
- Вероятность исходов:</b>
-"
-     String(data.probabilities || "Нет результата").replace(/\n/g, "
-"
   } catch (error) {
     result.innerText = "❌ " + error.message;
   }
-};
+};};
 </script>
 
 </body>
