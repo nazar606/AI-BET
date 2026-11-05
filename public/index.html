@@ -7,15 +7,12 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  padding: 22px 18px;
-  background:
-    radial-gradient(ellipse at top, #30200f 0%, #111 42%, #080808 100%);
+  padding: 22px 18px 110px;
+  background: radial-gradient(ellipse at top, #30200f 0%, #111 42%, #080808 100%);
   color: #fff;
   font-family: Arial, sans-serif;
   min-height: 100vh;
@@ -42,19 +39,9 @@ h1 {
   font-weight: bold;
 }
 
-.welcome {
-  margin: 28px 0 20px;
-}
-
-.welcome h2 {
-  font-size: 25px;
-  margin-bottom: 8px;
-}
-
-.welcome p {
-  color: #999;
-  font-size: 14px;
-}
+.welcome { margin: 28px 0 20px; }
+.welcome h2 { font-size: 25px; margin-bottom: 8px; }
+.welcome p { color: #999; font-size: 14px; }
 
 button {
   width: 100%;
@@ -71,13 +58,8 @@ button {
   transition: 0.2s;
 }
 
-button:active {
-  transform: scale(0.97);
-}
-
-button:disabled {
-  opacity: 0.6;
-}
+button:active { transform: scale(0.97); }
+button:disabled { opacity: 0.6; }
 
 .content {
   margin-top: 22px;
@@ -105,47 +87,7 @@ button:disabled {
   color: #fff;
 }
 
-.info {
-  color: #aaa;
-  font-size: 14px;
-}
-
-.crash-screen {
-  background:
-    radial-gradient(circle at center, #38200b, #151515 70%);
-  border: 1px solid #70400f;
-  padding: 35px 10px;
-  border-radius: 18px;
-  margin: 18px 0;
-  text-align: center;
-  overflow: hidden;
-}
-
-#crash-plane {
-  font-size: 60px;
-  transition: transform 0.1s linear;
-  filter: drop-shadow(0 0 12px #ff8a00);
-}
-
-#crash-number {
-  font-size: 48px;
-  color: #ff941c;
-  text-shadow: 0 0 20px #ff780066;
-}
-
-.crash-history {
-  text-align: center;
-  line-height: 2.2;
-  color: #ffad45;
-}
-
-#crash-status {
-  color: #ffad45;
-}
-
-
-
-
+.info { color: #aaa; font-size: 14px; }
 
 .feature-grid {
   display: grid;
@@ -171,20 +113,9 @@ button:disabled {
   text-align: left;
 }
 
-.feature-icon {
-  font-size: 35px;
-}
-
-.feature-title {
-  font-size: 19px;
-  font-weight: 900;
-  color: #ff941c;
-}
-
-.feature-description {
-  font-size: 12px;
-  color: #aaa;
-}
+.feature-icon { font-size: 35px; }
+.feature-title { font-size: 19px; font-weight: 900; color: #ff941c; }
+.feature-description { font-size: 12px; color: #aaa; }
 
 .feature-arrow {
   position: absolute;
@@ -193,10 +124,6 @@ button:disabled {
   color: #ff941c;
   font-size: 22px;
 }
-
-
-
-
 
 .bottom-nav {
   position: fixed;
@@ -225,23 +152,11 @@ button:disabled {
   gap: 5px;
 }
 
-.bottom-nav button span {
-  font-size: 10px;
-}
+.bottom-nav button span { font-size: 10px; }
 
-.bottom-nav button:active {
-  color: #ff941c;
-}
+.bottom-nav button:active { color: #ff941c; }
 
-body {
-  padding-bottom: 100px;
-}
-
-
-
-
-
-/* AI BET CRASH 2.0 */
+/* CRASH */
 
 .crash-screen {
   position: relative;
@@ -252,11 +167,34 @@ body {
   padding: 20px 12px;
   overflow: hidden;
   box-shadow: 0 0 25px #ff850022;
+  text-align: center;
+  margin: 18px 0;
+}
+
+#crash-plane {
+  display: inline-block;
+  font-size: 48px;
+  filter: drop-shadow(0 0 12px #ff8a00);
+  transition: transform 0.1s linear;
+}
+
+#crash-number {
+  font-size: 48px;
+  color: #ff941c;
+  text-shadow: 0 0 20px #ff780066;
+  margin: 12px 0;
+}
+
+.crash-status {
+  color: #ffad45;
+  font-weight: bold;
+  margin-top: 8px;
+  min-height: 22px;
 }
 
 .crash-graph {
   width: 100%;
-  height: 150px;
+  height: 130px;
   margin-top: 15px;
   overflow: visible;
 }
@@ -270,8 +208,42 @@ body {
   filter: drop-shadow(0 0 7px #ff8500);
 }
 
-.crash-area {
-  fill: url(#crashGradient);
+.crash-area { fill: url(#crashGradient); }
+
+.crash-history {
+  text-align: center;
+  line
+
+
+<div>Раундов в истории</div>
+      <h2 style="color:#ff941c">${history.length}</h2>
+    </div>
+
+    <h3 style="color:#ff941c">🚀 Последние результаты</h3>
+
+    <div class="match">
+      ${
+        history.length
+          ? history.map(x => `<div>${escapeHtml(x)}</div>`).join("")
+          : "Пока нет сыгранных раундов"
+      }
+    </div>
+
+    <h3 style="color:#ff941c">⚙️ Настройки</h3>
+    <div class="match">
+      <div>Приложение AI BET</div>
+      <div class="info">Версия 1.0</div>
+    </div>
+  `;
+};
+</script>
+
+</body>
+</html>-he
+
+
+ight: 2.2;
+  color: #ffad45;
 }
 
 .crash-history-item {
@@ -285,17 +257,28 @@ body {
   font-weight: bold;
 }
 
-.crash-status {
-  color: #ffad45;
-  font-weight: bold;
-  margin-top: 8px;
+.crash-explosion {
+  animation: explosion 0.5s ease-in-out;
 }
 
+@keyframes explosion {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
-
-
-
-
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  margin: auto;
+  border-radius: 50%;
+  border: 3px solid #ff941c;
+  background: #38200b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
 </style>
 </head>
 
@@ -312,7 +295,6 @@ body {
 </section>
 
 <div class="feature-grid">
-
   <button class="feature-card" type="button" onclick="loadMatches()">
     <span class="feature-icon">⚽</span>
     <span class="feature-title">МАТЧИ</span>
@@ -326,29 +308,19 @@ body {
     <span class="feature-description">Игра с коэффициентом</span>
     <span class="feature-arrow">→</span>
   </button>
-
 </div>
 
 <div class="content" id="content">
   Выбери нужный раздел.
 </div>
+
 <nav class="bottom-nav">
-  <button onclick="goHome()">
-    🏠<span>Главная</span>
-  </button>
-
-  <button onclick="loadMatches()">
-    ⚽<span>Матчи</span>
-  </button>
-
-  <button onclick="openCrash()">
-    🚀<span>CRASH</span>
-  </button>
-
-  <button onclick="openProfile()">
-    👤<span>Профиль</span>
-  </button>
+  <button onclick="goHome()">🏠<span>Главная</span></button>
+  <button onclick="loadMatches()">⚽<span>Матчи</span></button>
+  <button onclick="openCrash()">🚀<span>CRASH</span></button>
+  <button onclick="openProfile()">👤<span>Профиль</span></button>
 </nav>
+
 <script>
 const tg = window.Telegram?.WebApp;
 
@@ -367,11 +339,26 @@ function escapeHtml(value) {
   })[char]);
 }
 
+// ИСТОРИЯ CRASH
+
+window.crashTimer = null;
+window.crashHistory = [];
+
+// ГЛАВНАЯ
+
+window.goHome = function() {
+  clearInterval(window.crashTimer);
+  document.getElementById("content").innerHTML =
+    "Выбери нужный раздел.";
+};
+
 // МАТЧИ
 
 window.loadMatches = async function() {
+  clearInterval(window.crashTimer);
+
   const content = document.getElementById("content");
-  content.innerText = "⏳ Загружаем матчи...";
+  content.innerHTML = "⏳ Загружаем матчи...";
 
   try {
     const response = await fetch("/api/matches");
@@ -399,9 +386,12 @@ window.loadMatches = async function() {
           ${escapeHtml(e.strEvent || "Матч")}
         </div>
         <div class="info">
-          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<b
-         📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<br
-        🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
+          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}
+
+      📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}
+
+ 
+     🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
         </div>
       </div>
     `).join("");
@@ -411,10 +401,66 @@ window.loadMatches = async function() {
   }
 };
 
-// CRASH
+// ОТОБРАЖЕНИЕ ИСТОРИИ
 
-window.crashTimer = null;
-window.crashHistory = [];
+function renderCrashHistory() {
+  const history = document.getElementById("crash-history");
+  if (!history) return;
+
+  history.innerHTML = window.crashHistory.length
+    ? window.crashHistory.map(x =>
+        `<span class="crash-history-item">${escapeHtml(x)}</span>`
+      ).join("")
+    : "Пока нет раундов";
+}
+
+// ОТКРЫТИЕ CRASH
+
+window.openCrash = function() {
+  clearInterval(window.crashTimer);
+
+  const content = document.getElementById("content");
+
+  content.innerHTML = `
+    <div style="text-align:center">
+      <h2 style="color:#ff941c">🚀 CRASH</h2>
+
+      <div class="crash-screen">
+        <div id="crash-plane">✈️</div>
+        <h1 id="crash-number">1.00x</h1>
+        <div id="crash-status" class="crash-status">
+          Готов к запуску
+        </div>
+
+        <svg class="crash-graph" viewBox="0 0 320 150" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="crashGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ff941c" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#ff941c" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path id="crash-area" class="crash-area" d="M0 150 L0 140 L0 150 Z"></path>
+          <path id="crash-line" class="crash-line" d="M0 140"></path>
+        </svg>
+
+        <div id="crash-explosion"></div>
+      </div>
+
+      <button id="crash-start" onclick="startCrash()">
+        🚀 НАЧАТЬ РАУНД
+      </button>
+
+      <h3>История раундов</h3>
+      <div id="crash-history" class="crash-history">
+        Пока нет раундов
+      </div>
+    </div>
+  `;
+
+  renderCrashHistory();
+};
+
+// ЗАПУСК CRASH
 
 window.startCrash = function() {
   clearInterval(window.crashTimer);
@@ -425,6 +471,7 @@ window.startCrash = function() {
   const button = document.getElementById("crash-start");
   const graph = document.getElementById("crash-line");
   const area = document.getElementById("crash-area");
+  const explosion = document.getElementById("crash-explosion");
 
   if (!number || !status || !plane || !button || !graph || !area) return;
 
@@ -438,17 +485,16 @@ window.startCrash = function() {
 
   number.style.color = "#39d98a";
   plane.style.transform = "translate(0, 0) rotate(0deg)";
-  plane.style.transition = "transform 0.1s linear";
   button.disabled = true;
   button.innerText = "✈️ ПОЛЁТ...";
   status.innerText = "Коэффициент растёт!";
+  if (explosion) explosion.innerHTML = "";
 
   window.crashTimer = setInterval(() => {
     multiplier += 0.01 + multiplier * 0.012;
     x = Math.min(x + 4, 320);
 
     const y = Math.max(10, 140 - (multiplier - 1) * 15);
-
     points.push({x, y});
 
     graph.setAttribute(
@@ -472,14 +518,19 @@ window.startCrash = function() {
     if (multiplier >= crashAt) {
       clearInterval(window.crashTimer);
 
-      number.innerText = crashAt.toFixed(2) + "x";
+      const result = crashAt.toFixed(2) + "x";
+
+      number.innerText = result;
       number.style.color = "#ff4545";
       status.innerText = "💥 CRASH! Самолёт упал.";
 
       plane.style.transition = "transform 0.5s ease-in";
       plane.style.transform = "translate(210px, 35px) rotate(70deg)";
 
-      const result = crashAt.toFixed(2) + "x";
+      if (explosion) {
+        explosion.innerHTML = '<div class="crash-explosion" style="font-size:42px">💥</div>';
+      }
+
       window.crashHistory.unshift(result);
       window.crashHistory = window.crashHistory.slice(0, 10);
 
@@ -491,14 +542,12 @@ window.startCrash = function() {
   }, 100);
 };
 
+// ПРОФИЛЬ
 
+window.openProfile = function() {
+  clearInterval(window.crashTimer);
 
-
-
-};
-  window.openProfile = function() {
   const content = document.getElementById("content");
-
   const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
 
   const name = user
@@ -513,32 +562,17 @@ window.startCrash = function() {
 
   content.innerHTML = `
     <div style="text-align:center;padding:15px 0">
-      <div style="
-  width:90px;
-  height:90px;
-  margin:auto;
-  border-radius:50%;
-  border:3px solid #ff941c;
-  overflow:hidden;
-  background:#38200b;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:40px;
-">
-  ${user?.photo_url
-    ? '<img src="' + escapeHtml(user.photo_url) + '" style="width:100%;height:100%;object-fit:cover">'
-    : '👤'}
-</div>
-
+      <div class="profile-avatar">👤</div>
       <h2 style="color:#ff941c">${escapeHtml(name)}</h2>
       <p style="color:#999">${escapeHtml(username)}</p>
     </div>
 
     <h3 style="color:#ff941c">📊 Моя статистика</h3>
 
-    <div class="match">
-      <div>Раундов в истории</div>
+    <div class="match
+
+
+<div>Раундов в истории</div>
       <h2 style="color:#ff941c">${history.length}</h2>
     </div>
 
@@ -559,19 +593,12 @@ window.startCrash = function() {
     </div>
   `;
 };
-
-window.goHome = function() {
-  clearInterval(window.crashTimer);
-  document.getElementById("content").innerHTML =
-    "Выбери нужный раздел.";
-};
-
-
-
-
-
-
 </script>
 
 </body>
-</html>;
+</html>">
+
+
+
+
+
