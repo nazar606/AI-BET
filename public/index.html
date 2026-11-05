@@ -318,6 +318,80 @@ window.loadMatches = async function() {
     content.innerText = "❌ " + error.message;
   }
 };
+  window.crashTimer = null;
+
+window.openCrash = function() {
+  const content = document.getElementById("content");
+
+  clearInterval(window.crashTimer);
+
+  content.innerHTML = `
+    <div style="text-align:center;padding:15px">
+      <h2 style="color:#42a5ff">🚀 CRASH</h2>
+
+      <div id="crash-screen"
+        style="background:#101d32;padding:35px 10px;border-radius:15px;margin:15px 0">
+        <div id="crash-plane" style="font-size:55px">✈️</div>
+        <h1 id="crash-number" style="font-size:45px;color:#39d98a">1.00x</h1>
+        <div id="crash-status">Готов к запуску</div>
+      </div>
+
+      <button id="crash-start" onclick="startCrash()">
+        🚀 НАЧАТЬ РАУНД
+      </button>
+
+      <h3>История раундов</h3>
+      <div id="crash-history">Пока нет раундов</div>
+    </div>
+  `;
+};
+
+window.crashHistory = [];
+
+window.startCrash = function() {
+  clearInterval(window.crashTimer);
+
+  const number = document.getElementById("crash-number");
+  const status = document.getElementById("crash-status");
+  const plane = document.getElementById("crash-plane");
+  const button = document.getElementById("crash-start");
+
+  let multiplier = 1.00;
+  const crashAt = 1 + Math.random() * 9;
+
+  button.disabled = true;
+  button.innerText = "✈️ ПОЛЁТ...";
+  status.innerText = "Коэффициент растёт!";
+
+  window.crashTimer = setInterval(() => {
+    multiplier += 0.01 + multiplier * 0.012;
+
+    number.innerText = multiplier.toFixed(2) + "x";
+    plane.style.transform =
+      "translateX(" + Math.min(multiplier * 8, 180) + "px)";
+
+    if (multiplier >= crashAt) {
+      clearInterval(window.crashTimer);
+
+      const result = crashAt.toFixed(2) + "x";
+
+      number.innerText = result;
+      number.style.color = "#ff4545";
+      status.innerText = "💥 CRASH! Самолёт упал.";
+
+      window.crashHistory.unshift(result);
+      window.crashHistory = window.crashHistory.slice(0, 10);
+
+      document.getElementById("crash-history").innerHTML =
+        window.crashHistory.map(x =>
+          `<div style="padding:7px">${x}</div>`
+        ).join("");
+
+      button.disabled = false;
+      button.innerText = "🔄 НОВЫЙ РАУНД";
+    }
+  }, 100);
+};
 </script>
 
 </body>
