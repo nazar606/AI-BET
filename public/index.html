@@ -42,9 +42,7 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
-  opacity: 0.6;
-}
+button:disabled { opacity: 0.6; }
 
 .content {
   margin-top: 20px;
@@ -125,7 +123,7 @@ button:disabled {
 
 <script>
 const tg = window.Telegram?.WebApp;
-alert("JAVASCRIPT РАБОТАЕТ");
+
 if (tg) {
   tg.ready();
   tg.expand();
@@ -141,11 +139,10 @@ function escapeHtml(value) {
   })[char]);
 }
 
-// СПОРТИВНЫЕ МАТЧИ
+// МАТЧИ
 
 window.loadMatches = async function() {
   const content = document.getElementById("content");
-
   content.innerText = "⏳ Загружаем матчи...";
 
   try {
@@ -221,11 +218,10 @@ window.openCrash = function() {
 };
 
 function renderCrashHistory() {
-  const history = document.getElementById(
+  const history = document.getElementById("crash-history")
 
 
-ash-history");
-  if (!history) return;
+if (!history) return;
 
   history.innerHTML = window.crashHistory.length
     ? window.crashHistory.map(x =>
@@ -269,7 +265,8 @@ window.startCrash = function() {
       number.style.color = "#ff4545";
       status.innerText = "💥 CRASH! Самолёт упал.";
 
-      plane.style.transform = "translate(180px, 30px) rotate(35deg)";
+      plane.style.transform =
+        "translate(180px, 30px) rotate(35deg)";
 
       window.crashHistory.unshift(result);
       window.crashHistory = window.crashHistory.slice(0, 10);
@@ -284,4 +281,4 @@ window.startCrash = function() {
 </script>
 
 </body>
-</html>"cr
+</html>;
