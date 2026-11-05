@@ -95,7 +95,8 @@ button span {
 document.getElementById('content').innerHTML='⏳ Загружаем матчи...';
 fetch('/api/matches')
 .then(r=>r.json())
-.then(events=>{
+.then(data=>{
+const events = Array.isArray(data) ? data : (data.events || []);
 window.currentEvents=events;
 document.getElementById('content').innerHTML=events.map((e,i)=>`
 <div class='match'>
