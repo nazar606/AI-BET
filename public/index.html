@@ -102,8 +102,7 @@ document.getElementById('content').innerHTML=events.map((e,i)=>`
 <div class='match'>
 <b>${e.strEvent}</b>
 
-<button type='button' onclick='analyzeMatch(${i})'>🤖 АНАЛИЗИРОВАТЬ</button>
-<div id='analysis-${i}'></div>
+
 </div>
 `).join('');
 })
