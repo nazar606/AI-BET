@@ -7,93 +7,147 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  padding: 20px;
-  background: #0c1424;
-  color: white;
+  padding: 22px 18px;
+  background:
+    radial-gradient(ellipse at top, #30200f 0%, #111 42%, #080808 100%);
+  color: #fff;
   font-family: Arial, sans-serif;
+  min-height: 100vh;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 8px 0 20px;
+  border-bottom: 1px solid #332416;
 }
 
-h1 { color: #42a5ff; }
+h1 {
+  color: #ff8a00;
+  font-size: 29px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px #ff800055;
+}
 
-.status { color: #39d98a; font-size: 12px; }
+.status {
+  color: #ff9b28;
+  font-size: 12px;
+  font-weight: bold;
+}
 
-.welcome { margin-top: 25px; }
-.welcome p { color: #9aa9bd; }
+.welcome {
+  margin: 28px 0 20px;
+}
+
+.welcome h2 {
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+
+.welcome p {
+  color: #999;
+  font-size: 14px;
+}
 
 button {
   width: 100%;
-  margin-top: 12px;
-  background: #192941;
-  color: white;
-  border: 1px solid #263d5c;
+  margin-top: 13px;
+  background: linear-gradient(135deg, #ff9d22, #f05b00);
+  color: #111;
+  border: none;
   border-radius: 16px;
-  padding: 18px;
-  font-size: 16px;
+  padding: 19px;
+  font-size: 17px;
+  font-weight: 900;
   cursor: pointer;
+  box-shadow: 0 5px 20px #ff780033;
+  transition: 0.2s;
 }
 
-button:disabled { opacity: 0.6; }
+button:active {
+  transform: scale(0.97);
+}
+
+button:disabled {
+  opacity: 0.6;
+}
 
 .content {
-  margin-top: 20px;
+  margin-top: 22px;
   padding: 18px;
-  background: #192941;
-  border-radius: 16px;
-  min-height: 100px;
+  background: linear-gradient(145deg, #1b1b1b, #111);
+  border: 1px solid #392817;
+  border-radius: 18px;
+  min-height: 110px;
   overflow-wrap: anywhere;
 }
 
 .match {
-  padding: 15px;
-  margin-bottom: 12px;
-  background: #263d5c;
-  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 13px;
+  background: #222;
+  border: 1px solid #44301b;
+  border-left: 4px solid #ff8700;
+  border-radius: 13px;
   line-height: 1.8;
 }
 
 .match-name {
   font-size: 17px;
   font-weight: bold;
+  color: #fff;
 }
 
 .info {
-  color: #b8c7dc;
+  color: #aaa;
   font-size: 14px;
 }
 
 .crash-screen {
-  background: #101d32;
-  padding: 30px 10px;
-  border-radius: 15px;
-  margin: 15px 0;
+  background:
+    radial-gradient(circle at center, #38200b, #151515 70%);
+  border: 1px solid #70400f;
+  padding: 35px 10px;
+  border-radius: 18px;
+  margin: 18px 0;
   text-align: center;
   overflow: hidden;
 }
 
 #crash-plane {
-  font-size: 55px;
+  font-size: 60px;
   transition: transform 0.1s linear;
+  filter: drop-shadow(0 0 12px #ff8a00);
 }
 
 #crash-number {
-  font-size: 45px;
-  color: #39d98a;
+  font-size: 48px;
+  color: #ff941c;
+  text-shadow: 0 0 20px #ff780066;
 }
 
 .crash-history {
   text-align: center;
-  line-height: 2;
+  line-height: 2.2;
+  color: #ffad45;
 }
+
+#crash-status {
+  color: #ffad45;
+}
+
+
+
+
+
+
 </style>
 </head>
 
