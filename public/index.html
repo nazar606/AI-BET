@@ -470,16 +470,22 @@ window.startCrash = function() {
   content.innerHTML = `
     <div style="text-align:center;padding:15px 0">
       <div style="
-        width:85px;height:85px;
-        margin:auto;
-        border-radius:50%;
-        background:#38200b;
-        border:2px solid #ff941c;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:40px;
-      ">👤</div>
+  width:90px;
+  height:90px;
+  margin:auto;
+  border-radius:50%;
+  border:3px solid #ff941c;
+  overflow:hidden;
+  background:#38200b;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+">
+  ${user?.photo_url
+    ? '<img src="' + escapeHtml(user.photo_url) + '" style="width:100%;height:100%;object-fit:cover">'
+    : '👤'}
+</div>
 
       <h2 style="color:#ff941c">${escapeHtml(name)}</h2>
       <p style="color:#999">${escapeHtml(username)}</p>
