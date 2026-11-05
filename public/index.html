@@ -90,6 +90,168 @@ button {
 <button type="button" onclick="loadMatches()">
   ⚽ ПОКАЗАТЬ МАТЧИ
 </button>
+  <!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI BET</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #0c1424;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 { color: #42a5ff; }
+
+.status {
+  color: #39d98a;
+  font-size: 12px;
+}
+
+.welcome { margin-top: 35px; }
+.welcome p { color: #9aa9bd; }
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  background: #1677e8;
+  color: white;
+  border: 0;
+  border-radius: 16px;
+  padding: 18px;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.content {
+  margin-top: 20px;
+  padding: 18px;
+  background: #192941;
+  border-radius: 16px;
+  min-height: 100px;
+  overflow-wrap: anywhere;
+}
+
+.match {
+  padding: 15px;
+  margin-bottom: 12px;
+  background: #263d5c;
+  border-radius: 12px;
+  line-height: 1.8;
+}
+
+.match-name {
+  font-size: 17px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.info {
+  color: #b8c7dc;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>⚡ AI BET</h1>
+  <div class="status">● ONLINE</div>
+</header>
+
+<section class="welcome">
+  <h2>Спортивные матчи</h2>
+  <p>Расписание спортивных событий</p>
+</section>
+
+<button type="button" onclick="loadMatches()">
+  ⚽ ПОКАЗАТЬ МАТЧИ
+</button>
+
+<div class="content" id="content">
+  Нажми «ПОКАЗАТЬ МАТЧИ».
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "'"
+  })[char]);
+}
+
+window.loadMatches = async function() {
+  const content = document.getElementById("content");
+
+  content.innerText = "⏳ Загружаем матчи...";
+
+  try {
+    const response = await fetch("/api/matches");
+
+    if (!response.ok) {
+      throw new Error("Ошибка API: " + response.status);
+    }
+
+    const data = await response.json();
+
+    const events = Array.isArray(data)
+      ? data
+      : Array.isArray(data?.events)
+        ? data.events
+        : [];
+
+    if (events.length === 0) {
+      content.innerText = "Сегодня матчей не найдено.";
+      return;
+    }
+
+    content.innerHTML = events.map(e => `
+      <div class="match">
+        <div class="match-name">
+          ${escapeHtml(e.strEvent || "Матч")}
+        </div>
+
+        <div class="info">
+          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<
+          📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<b
+         🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
+        </div>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    content.innerText = "❌ " + error.message;
+  }
+};
+</script>
+
+</body>
+</html>
 
 <div class="content" id="content">
   Нажми «ПОКАЗАТЬ МАТЧИ».
