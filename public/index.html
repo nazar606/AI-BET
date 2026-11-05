@@ -25,24 +25,25 @@ header {
 
 h1 { color: #42a5ff; }
 
-.status {
-  color: #39d98a;
-  font-size: 12px;
-}
+.status { color: #39d98a; font-size: 12px; }
 
-.welcome { margin-top: 35px; }
+.welcome { margin-top: 25px; }
 .welcome p { color: #9aa9bd; }
 
 button {
   width: 100%;
-  margin-top: 20px;
-  background: #1677e8;
+  margin-top: 12px;
+  background: #192941;
   color: white;
-  border: 0;
+  border: 1px solid #263d5c;
   border-radius: 16px;
   padding: 18px;
-  font-size: 17px;
+  font-size: 16px;
   cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
 }
 
 .content {
@@ -65,104 +66,35 @@ button {
 .match-name {
   font-size: 17px;
   font-weight: bold;
-  color: #ffffff;
 }
 
 .info {
   color: #b8c7dc;
   font-size: 14px;
 }
-</style>
-</head>
 
-<body>
-
-<header>
-  <h1>⚡ AI BET</h1>
-  <div class="status">● ONLINE</div>
-</header>
-
-<section class="welcome">
-  <h2>Спортивные матчи</h2>
-  <p>Расписание спортивных событий</p>
-</section>
-
-<button type="button" onclick="loadMatches()">
-  ⚽ ПОКАЗАТЬ МАТЧИ
-</button>
-  <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI BET</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  padding: 20px;
-  background: #0c1424;
-  color: white;
-  font-family: Arial, sans-serif;
+.crash-screen {
+  background: #101d32;
+  padding: 30px 10px;
+  border-radius: 15px;
+  margin: 15px 0;
+  text-align: center;
+  overflow: hidden;
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+#crash-plane {
+  font-size: 55px;
+  transition: transform 0.1s linear;
 }
 
-h1 { color: #42a5ff; }
-
-.status {
+#crash-number {
+  font-size: 45px;
   color: #39d98a;
-  font-size: 12px;
 }
 
-.welcome { margin-top: 35px; }
-.welcome p { color: #9aa9bd; }
-
-button {
-  width: 100%;
-  margin-top: 20px;
-  background: #1677e8;
-  color: white;
-  border: 0;
-  border-radius: 16px;
-  padding: 18px;
-  font-size: 17px;
-  cursor: pointer;
-}
-
-.content {
-  margin-top: 20px;
-  padding: 18px;
-  background: #192941;
-  border-radius: 16px;
-  min-height: 100px;
-  overflow-wrap: anywhere;
-}
-
-.match {
-  padding: 15px;
-  margin-bottom: 12px;
-  background: #263d5c;
-  border-radius: 12px;
-  line-height: 1.8;
-}
-
-.match-name {
-  font-size: 17px;
-  font-weight: bold;
-  color: #ffffff;
-}
-
-.info {
-  color: #b8c7dc;
-  font-size: 14px;
+.crash-history {
+  text-align: center;
+  line-height: 2;
 }
 </style>
 </head>
@@ -175,16 +107,20 @@ button {
 </header>
 
 <section class="welcome">
-  <h2>Спортивные матчи</h2>
-  <p>Расписание спортивных событий</p>
+  <h2>Спортивная платформа</h2>
+  <p>Матчи и игра CRASH</p>
 </section>
 
 <button type="button" onclick="loadMatches()">
-  ⚽ ПОКАЗАТЬ МАТЧИ
+  ⚽ МАТЧИ
+</button>
+
+<button type="button" onclick="openCrash()">
+  🚀 CRASH
 </button>
 
 <div class="content" id="content">
-  Нажми «ПОКАЗАТЬ МАТЧИ».
+  Выбери нужный раздел.
 </div>
 
 <script>
@@ -204,6 +140,8 @@ function escapeHtml(value) {
     "'": "'"
   })[char]);
 }
+
+// СПОРТИВНЫЕ МАТЧИ
 
 window.loadMatches = async function() {
   const content = document.getElementById("content");
@@ -225,7 +163,7 @@ window.loadMatches = async function() {
         ? data.events
         : [];
 
-    if (events.length === 0) {
+    if (!events.length) {
       content.innerText = "Сегодня матчей не найдено.";
       return;
     }
@@ -235,11 +173,10 @@ window.loadMatches = async function() {
         <div class="match-name">
           ${escapeHtml(e.strEvent || "Матч")}
         </div>
-
         <div class="info">
-          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<
-          📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<b
-         🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
+          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<b
+         📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<br
+        🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
         </div>
       </div>
     `).join("");
@@ -248,91 +185,24 @@ window.loadMatches = async function() {
     content.innerText = "❌ " + error.message;
   }
 };
-</script>
 
-</body>
-</html>
+// CRASH
 
-<div class="content" id="content">
-  Нажми «ПОКАЗАТЬ МАТЧИ».
-</div>
-
-<script>
-const tg = window.Telegram?.WebApp;
-
-if (tg) {
-  tg.ready();
-  tg.expand();
-}
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "'"
-  })[char]);
-}
-
-window.loadMatches = async function() {
-  const content = document.getElementById("content");
-
-  content.innerText = "⏳ Загружаем матчи...";
-
-  try {
-    const response = await fetch("/api/matches");
-
-    if (!response.ok) {
-      throw new Error("Ошибка API: " + response.status);
-    }
-
-    const data = await response.json();
-
-    const events = Array.isArray(data)
-      ? data
-      : Array.isArray(data?.events)
-        ? data.events
-        : [];
-
-    if (events.length === 0) {
-      content.innerText = "Сегодня матчей не найдено.";
-      return;
-    }
-
-    content.innerHTML = events.map(e => `
-      <div class="match">
-        <div class="match-name">
-          ${escapeHtml(e.strEvent || "Матч")}
-        </div>
-
-        <div class="info">
-          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<
-          📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<b
-         🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
-        </div>
-      </div>
-    `).join("");
-
-  } catch (error) {
-    content.innerText = "❌ " + error.message;
-  }
-};
-  window.crashTimer = null;
+window.crashTimer = null;
+window.crashHistory = [];
 
 window.openCrash = function() {
-  const content = document.getElementById("content");
-
   clearInterval(window.crashTimer);
 
+  const content = document.getElementById("content");
+
   content.innerHTML = `
-    <div style="text-align:center;padding:15px">
+    <div style="text-align:center">
       <h2 style="color:#42a5ff">🚀 CRASH</h2>
 
-      <div id="crash-screen"
-        style="background:#101d32;padding:35px 10px;border-radius:15px;margin:15px 0">
-        <div id="crash-plane" style="font-size:55px">✈️</div>
-        <h1 id="crash-number" style="font-size:45px;color:#39d98a">1.00x</h1>
+      <div class="crash-screen">
+        <div id="crash-plane">✈️</div>
+        <h1 id="crash-number">1.00x</h1>
         <div id="crash-status">Готов к запуску</div>
       </div>
 
@@ -341,12 +211,28 @@ window.openCrash = function() {
       </button>
 
       <h3>История раундов</h3>
-      <div id="crash-history">Пока нет раундов</div>
+      <div id="crash-history" class="crash-history">
+        Пока нет раундов
+      </div>
     </div>
   `;
+
+  renderCrashHistory();
 };
 
-window.crashHistory = [];
+function renderCrashHistory() {
+  const history = document.getElementById(
+
+
+ash-history");
+  if (!history) return;
+
+  history.innerHTML = window.crashHistory.length
+    ? window.crashHistory.map(x =>
+        `<div>${escapeHtml(x)}</div>`
+      ).join("")
+    : "Пока нет раундов";
+}
 
 window.startCrash = function() {
   clearInterval(window.crashTimer);
@@ -356,9 +242,12 @@ window.startCrash = function() {
   const plane = document.getElementById("crash-plane");
   const button = document.getElementById("crash-start");
 
-  let multiplier = 1.00;
+  if (!number || !status || !plane || !button) return;
+
+  let multiplier = 1;
   const crashAt = 1 + Math.random() * 9;
 
+  number.style.color = "#39d98a";
   button.disabled = true;
   button.innerText = "✈️ ПОЛЁТ...";
   status.innerText = "Коэффициент растёт!";
@@ -367,6 +256,7 @@ window.startCrash = function() {
     multiplier += 0.01 + multiplier * 0.012;
 
     number.innerText = multiplier.toFixed(2) + "x";
+
     plane.style.transform =
       "translateX(" + Math.min(multiplier * 8, 180) + "px)";
 
@@ -379,13 +269,12 @@ window.startCrash = function() {
       number.style.color = "#ff4545";
       status.innerText = "💥 CRASH! Самолёт упал.";
 
+      plane.style.transform = "translate(180px, 30px) rotate(35deg)";
+
       window.crashHistory.unshift(result);
       window.crashHistory = window.crashHistory.slice(0, 10);
 
-      document.getElementById("crash-history").innerHTML =
-        window.crashHistory.map(x =>
-          `<div style="padding:7px">${x}</div>`
-        ).join("");
+      renderCrashHistory();
 
       button.disabled = false;
       button.innerText = "🔄 НОВЫЙ РАУНД";
@@ -395,4 +284,4 @@ window.startCrash = function() {
 </script>
 
 </body>
-</html>
+</html>"cr
