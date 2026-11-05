@@ -163,13 +163,23 @@ button:disabled {
   <p>Матчи и игра CRASH</p>
 </section>
 
-<button type="button" onclick="loadMatches()">
-  ⚽ МАТЧИ
-</button>
+<div class="feature-grid">
 
-<button type="button" onclick="openCrash()">
-  🚀 CRASH
-</button>
+  <button class="feature-card" type="button" onclick="loadMatches()">
+    <span class="feature-icon">⚽</span>
+    <span class="feature-title">МАТЧИ</span>
+    <span class="feature-description">Спортивные события</span>
+    <span class="feature-arrow">→</span>
+  </button>
+
+  <button class="feature-card" type="button" onclick="openCrash()">
+    <span class="feature-icon">🚀</span>
+    <span class="feature-title">CRASH</span>
+    <span class="feature-description">Игра с коэффициентом</span>
+    <span class="feature-arrow">→</span>
+  </button>
+
+</div>
 
 <div class="content" id="content">
   Выбери нужный раздел.
