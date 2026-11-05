@@ -452,6 +452,75 @@ window.startCrash = function() {
     }
   }, 100);
 };
+  window.openProfile = function() {
+  const content = document.getElementById("content");
+
+  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+
+  const name = user
+    ? [user.first_name, user.last_name].filter(Boolean).join(" ")
+    : "Гость";
+
+  const username = user?.username
+    ? "@" + user.username
+    : "Не указан";
+
+  const history = window.crashHistory || [];
+
+  content.innerHTML = `
+    <div style="text-align:center;padding:15px 0">
+      <div style="
+        width:85px;height:85px;
+        margin:auto;
+        border-radius:50%;
+        background:#38200b;
+        border:2px solid #ff941c;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:40px;
+      ">👤</div>
+
+      <h2 style="color:#ff941c">${escapeHtml(name)}</h2>
+      <p style="color:#999">${escapeHtml(username)}</p>
+    </div>
+
+    <h3 style="color:#ff941c">📊 Моя статистика</h3>
+
+    <div class="match">
+      <div>Раундов в истории</div>
+      <h2 style="color:#ff941c">${history.length}</h2>
+    </div>
+
+    <h3 style="color:#ff941c">🚀 Последние результаты</h3>
+
+    <div class="match">
+      ${
+        history.length
+          ? history.map(x => `<div>${escapeHtml(x)}</div>`).join("")
+          : "Пока нет сыгранных раундов"
+      }
+    </div>
+
+    <h3 style="color:#ff941c">⚙️ Настройки</h3>
+    <div class="match">
+      <div>Приложение AI BET</div>
+      <div class="info">Версия 1.0</div>
+    </div>
+  `;
+};
+
+window.goHome = function() {
+  clearInterval(window.crashTimer);
+  document.getElementById("content").innerHTML =
+    "Выбери нужный раздел.";
+};
+
+
+
+
+
+
 </script>
 
 </body>
