@@ -24,37 +24,29 @@ header {
 }
 
 h1 { color: #42a5ff; }
-.status { color: #39d98a; font-size: 12px; }
+
+.status {
+  color: #39d98a;
+  font-size: 12px;
+}
 
 .welcome { margin-top: 35px; }
 .welcome p { color: #9aa9bd; }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 25px;
-}
-
 button {
-  background: #192941;
+  width: 100%;
+  margin-top: 20px;
+  background: #1677e8;
   color: white;
-  border: 1px solid #263d5c;
+  border: 0;
   border-radius: 16px;
-  padding: 18px 10px;
-  font-size: 16px;
-  text-align: left;
+  padding: 18px;
+  font-size: 17px;
   cursor: pointer;
 }
 
-button span {
-  display: block;
-  font-size: 27px;
-  margin-bottom: 12px;
-}
-
 .content {
-  margin-top: 25px;
+  margin-top: 20px;
   padding: 18px;
   background: #192941;
   border-radius: 16px;
@@ -63,17 +55,22 @@ button span {
 }
 
 .match {
-  padding: 12px;
-  margin-bottom: 10px;
+  padding: 15px;
+  margin-bottom: 12px;
   background: #263d5c;
   border-radius: 12px;
+  line-height: 1.8;
 }
 
-.match button {
-  width: 100%;
-  margin-top: 12px;
-  text-align: center;
-  background: #1677e8;
+.match-name {
+  font-size: 17px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.info {
+  color: #b8c7dc;
+  font-size: 14px;
 }
 </style>
 </head>
@@ -86,49 +83,16 @@ button span {
 </header>
 
 <section class="welcome">
-  <h2>Спортивная аналитика</h2>
-  <p>Добро пожаловать в AI BET!</p>
+  <h2>Спортивные матчи</h2>
+  <p>Расписание спортивных событий</p>
 </section>
 
-<div class="grid">
-  <button type="button" onclick="
-document.getElementById('content').innerHTML='⏳ Загружаем матчи...';
-fetch('/api/matches')
-.then(r=>r.json())
-.then(data=>{
-const events = Array.isArray(data) ? data : (data.events || []);
-window.currentEvents=events;
-document.getElementById('content').innerHTML=events.map((e,i)=>`
-<div class='match'>
-<b>${e.strEvent}</b>
-
-
-</div>
-`).join('');
-})
-.catch(error=>{
-document.getElementById('content').innerText='Ошибка: '+error.message;
-console.error(error);
-});
-">
-<span>⚽</span>Матчи
+<button type="button" onclick="loadMatches()">
+  ⚽ ПОКАЗАТЬ МАТЧИ
 </button>
 
-  <button type="button" onclick="document.getElementById('content').innerText='🤖 Сначала открой раздел Матчи и выбери матч.'">
-    <span>🤖</span>AI-прогнозы
-  </button>
-
-  <button type="button" onclick="document.getElementById('content').innerText='📊 Здесь будет статистика.'">
-    <span>📊</span>Статистика
-  </button>
-
-  <button type="button" onclick="document.getElementById('content').innerText='👤 Твой профиль AI BET.'">
-    <span>👤</span>Профиль
-  </button>
-</div>
-
 <div class="content" id="content">
-  Выбери нужный раздел.
+  Нажми «ПОКАЗАТЬ МАТЧИ».
 </div>
 
 <script>
@@ -139,85 +103,59 @@ if (tg) {
   tg.expand();
 }
 
-window.currentEvents = [];
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "'"
+  })[char]);
+}
 
 window.loadMatches = async function() {
   const content = document.getElementById("content");
+
   content.innerText = "⏳ Загружаем матчи...";
 
   try {
     const response = await fetch("/api/matches");
-    if (!response.ok) throw new Error("Ошибка загрузки матчей");
 
-    const events = await response.json();
-    window.currentEvents = events;
+    if (!response.ok) {
+      throw new Error("Ошибка API: " + response.status);
+    }
 
-    if (!events.length) {
+    const data = await response.json();
+
+    const events = Array.isArray(data)
+      ? data
+      : Array.isArray(data?.events)
+        ? data.events
+        : [];
+
+    if (events.length === 0) {
       content.innerText = "Сегодня матчей не найдено.";
       return;
     }
 
-    content.innerHTML = events.map((e, i) => `
+    content.innerHTML = events.map(e => `
       <div class="match">
-        <b>${e.strEvent || "Матч"}</b>
+        <div class="match-name">
+          ${escapeHtml(e.strEvent || "Матч")}
+        </div>
 
-        🏆 ${e.strLeague || e.strSport || "Спорт"}<
-📅 ${e.dateEvent || ""}<b
- ${e.strTime || "Время неизвестно"}<br
-        <button type="button" onclick="window.analyzeMatch(${i})">
-          🤖 АНАЛИЗИРОВАТЬ
-        </button>
-        <div id="analysis-${i}"></div>
+        <div class="info">
+          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<
+          📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<b
+         🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
+        </div>
       </div>
     `).join("");
 
   } catch (error) {
-    content.innerText = "❌ Ошибка загрузки матчей";
+    content.innerText = "❌ " + error.message;
   }
 };
-
-window.analyzeMatch = async function(index) {
-  const event = window.currentEvents[index];
-  const result = document.getElementById("analysis-" + index);
-
-  if (!event || !result) return;
-
-  result.innerText = "⏳ Анализируем...";
-
-  try {
-    const response = await fetch("/api/analyze", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        match: event.strEvent,
-        sport: event.strSport,
-        league: event.strLeague
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Ошибка анализа");
-    }
-
-    result.innerHTML =
-      "
-<b>📊 Вероятность исходов:</b><
- +
-      String(data.probabilities || "Нет результата").replace(/\n/g, "<
-);
-
-  } catch (error) {
-    result.innerText = "❌ " + error.message;
-  }
-};};
-</script>
-
-</body>
-</html>};
 </script>
 
 </body>
