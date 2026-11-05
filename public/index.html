@@ -136,122 +136,43 @@ if (tg) {
   tg.expand();
 }
 
-const content = document.getElementById("content");
 window.currentEvents = [];
 
-<script>
-const tg = window.Telegram?.WebApp;
-
-if (tg) {
-  tg.ready();
-  tg.expand();
-}
-
-const content = document.getElementById("content");
-window.currentEvents = [];
-
-document.querySelectorAll("[data-section]").forEach(button => {
-  button.addEventListener("click", () => {
-    show(button.dataset.section);
-  });
-});
-
-window.show = async function(section) {
-  if (section === "matches") {
-    content.innerHTML = "⏳ Загружаем матчи...";
-
-    try {
-      const response = await fetch("/api/matches");
-      if (!response.ok) throw new Error("Ошибка загрузки: " + response.status);
-
-      const events = await response.json();
-
-      if (!Array.isArray(events) || events.length === 0) {
-        content.innerText = "Сегодня матчей не найдено.";
-        return;
-      }
-
-      window.currentEvents = events;
-
-      content.innerHTML = events.map((event, index) => `
-        <div class="match">
-          <b>${event.strEvent || "Матч"}</b>
-
-          🏆 ${event.strLeague || event.strSport || "Спорт"}<
-          📅 ${event.dateEvent || ""}<b
-         🕒 ${event.strTime || "Время неизвестно"}
-          <button type="button" class="analyze-button" data-index="${index}">
-            🤖 АНАЛИЗИРОВАТЬ
-          </button>
-          <div id="analysis-${index}"></div>
-        </div>
-      `).join("");
-
-      document.querySelectorAll(".analyze-button").forEach(button => {
-        button.addEventListener("click", () => {
-          analyzeMatch(Number(button.dataset.index));
-        });
-      });
-
-    } catch (error) {
-      console.error(error);
-      content.innerText = "❌ Ошибка: " + error.message;
-    }
-    return;
-  }
-
-  const messages = {
-    analysis: "🤖 Сначала открой раздел Матчи и выбери матч.",
-    stats: "📊 Здесь будет статистика.",
-    profile: "👤 Твой профиль AI BET."
-  };
-
-  content.innerText = messages[section] || "Раздел";
-};
-
-async function analyzeMatch(index) {
-  const event = window.currentEvents[index];
-  const result = document.getElementById("analysis-" + index);
-
-  if (!event || !result) return;
-
-  result.innerText = "⏳ Анализируем...";
+window.loadMatches = async function() {
+  const content = document.getElementById("content");
+  content.innerText = "⏳ Загружаем матчи...";
 
   try {
-    const response = await fetch("/api/analyze", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        match: event.strEvent,
-        sport: event.strSport,
-        league: event.strLeague
-      })
-    });
+    const response = await fetch("/api/matches");
+    if (!response.ok) throw new Error("Ошибка загрузки матчей");
 
-    const data = await response.json();
+    const events = await response.json();
+    window.currentEvents = events;
 
-    if (!response.ok) {
-      throw new Error(data.error || "Ошибка анализа");
+    if (!events.length) {
+      content.innerText = "Сегодня матчей не найдено.";
+      return;
     }
 
-    result.innerHTML =
-      "
-<b>
-роятность исходов:</b>
-" +
+    content.innerHTML = events.map((e, i) => `
+      <div class="match">
+        <b>${e.strEvent || "Матч"}</b>
 
-  String(data.probabilities || "Нет результата").replace(/\n/g, "
-");
+        🏆 ${e.strLeague || e.strSport || "Спорт"}<
+        📅 ${e.dateEvent || ""}<b
+       🕒 ${e.strTime || "Время неизвестно"}
+        <button type="button" onclick="window.analyzeMatch(${i})">
+          🤖 АНАЛИЗИРОВАТЬ
+        </button>
+        <div id="analysis-${i}"></div>
+      </div>
+    `).join("");
 
- catch (error) {
-    console.error(error);
-    result.innerText = "❌ Ошибка анализа: " + error.message;
+  } catch (error) {
+    content.innerText = "❌ Ошибка загрузки матчей";
   }
-}
-</script>
-<script>
+};
+
 window.analyzeMatch = async function(index) {
   const event = window.currentEvents[index];
   const result = document.getElementById("analysis-" + index);
@@ -281,15 +202,16 @@ window.analyzeMatch = async function(index) {
 
     result.innerHTML =
       "
-<b>📊 Вероятность исходов:</b><
- +
-      String(data.probabilities || "Нет результата").replace(/\n/g, "<
-);
 
+ Вероятность исходов:</b>
+"
+     String(data.probabilities || "Нет результата").replace(/\n/g, "
+"
   } catch (error) {
-    result.innerText = "❌ Ошибка анализа: " + error.message;
+    result.innerText = "❌ " + error.message;
   }
 };
 </script>
+
 </body>
-</html>/
+</html>
