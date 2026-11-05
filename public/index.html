@@ -161,7 +161,7 @@ window.loadMatches = async function() {
         🏆 ${e.strLeague || e.strSport || "Спорт"}<
         📅 ${e.dateEvent || ""}<b
        🕒 ${e.strTime || "Время неизвестно"}
-        <button type="button" onclick="window.analyzeMatch(${i})">
+        <button type="button" onclick="alert('КНОПКА РАБОТАЕТ'); window.analyzeMatch(${i})">
           🤖 АНАЛИЗИРОВАТЬ
         </button>
         <div id="analysis-${i}"></div>
