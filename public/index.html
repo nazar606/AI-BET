@@ -235,7 +235,23 @@ button:disabled {
 <div class="content" id="content">
   Выбери нужный раздел.
 </div>
+<nav class="bottom-nav">
+  <button onclick="goHome()">
+    🏠<span>Главная</span>
+  </button>
 
+  <button onclick="loadMatches()">
+    ⚽<span>Матчи</span>
+  </button>
+
+  <button onclick="openCrash()">
+    🚀<span>CRASH</span>
+  </button>
+
+  <button onclick="openProfile()">
+    👤<span>Профиль</span>
+  </button>
+</nav>
 <script>
 const tg = window.Telegram?.WebApp;
 
