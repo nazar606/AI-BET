@@ -106,7 +106,10 @@ document.getElementById('content').innerHTML=events.map((e,i)=>`
 </div>
 `).join('');
 })
-.catch(()=>document.getElementById('content').innerText='Ошибка загрузки матчей');
+.catch(error=>{
+document.getElementById('content').innerText='Ошибка: '+error.message;
+console.error(error);
+});
 ">
 <span>⚽</span>Матчи
 </button>
