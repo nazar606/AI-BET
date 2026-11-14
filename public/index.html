@@ -3,290 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
 <title>AI BET</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  padding: 22px 18px 110px;
-  background: radial-gradient(ellipse at top, #30200f 0%, #111 42%, #080808 100%);
-  color: #fff;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0 20px;
-  border-bottom: 1px solid #332416;
-}
-
-h1 {
-  color: #ff8a00;
-  font-size: 29px;
-  letter-spacing: 1px;
-  text-shadow: 0 0 18px #ff800055;
-}
-
-.status {
-  color: #ff9b28;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.welcome { margin: 28px 0 20px; }
-.welcome h2 { font-size: 25px; margin-bottom: 8px; }
-.welcome p { color: #999; font-size: 14px; }
-
-button {
-  width: 100%;
-  margin-top: 13px;
-  background: linear-gradient(135deg, #ff9d22, #f05b00);
-  color: #111;
-  border: none;
-  border-radius: 16px;
-  padding: 19px;
-  font-size: 17px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 5px 20px #ff780033;
-  transition: 0.2s;
-}
-
-button:active { transform: scale(0.97); }
-button:disabled { opacity: 0.6; }
-
-.content {
-  margin-top: 22px;
-  padding: 18px;
-  background: linear-gradient(145deg, #1b1b1b, #111);
-  border: 1px solid #392817;
-  border-radius: 18px;
-  min-height: 110px;
-  overflow-wrap: anywhere;
-}
-
-.match {
-  padding: 16px;
-  margin-bottom: 13px;
-  background: #222;
-  border: 1px solid #44301b;
-  border-left: 4px solid #ff8700;
-  border-radius: 13px;
-  line-height: 1.8;
-}
-
-.match-name {
-  font-size: 17px;
-  font-weight: bold;
-  color: #fff;
-}
-
-.info { color: #aaa; font-size: 14px; }
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.feature-card {
-  position: relative;
-  min-height: 175px;
-  margin: 0;
-  padding: 18px 13px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 10px;
-  background: linear-gradient(145deg, #25201a, #111);
-  border: 1px solid #70400f;
-  border-radius: 18px;
-  color: white;
-  text-align: left;
-}
-
-.feature-icon { font-size: 35px; }
-.feature-title { font-size: 19px; font-weight: 900; color: #ff941c; }
-.feature-description { font-size: 12px; color: #aaa; }
-
-.feature-arrow {
-  position: absolute;
-  right: 15px;
-  bottom: 13px;
-  color: #ff941c;
-  font-size: 22px;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  background: #111;
-  border-top: 1px solid #493018;
-  padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
-  z-index: 1000;
-}
-
-.bottom-nav button {
-  margin: 0;
-  padding: 8px 2px;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  color: #999;
-  font-size: 21px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-
-.bottom-nav button span { font-size: 10px; }
-
-.bottom-nav button:active { color: #ff941c; }
-
-/* CRASH */
-
-.crash-screen {
-  position: relative;
-  min-height: 280px;
-  background: radial-gradient(circle at center, #30200e, #101010 75%);
-  border: 1px solid #8a4b0c;
-  border-radius: 20px;
-  padding: 20px 12px;
-  overflow: hidden;
-  box-shadow: 0 0 25px #ff850022;
-  text-align: center;
-  margin: 18px 0;
-}
-
-#crash-plane {
-  display: inline-block;
-  font-size: 48px;
-  filter: drop-shadow(0 0 12px #ff8a00);
-  transition: transform 0.1s linear;
-}
-
-#crash-number {
-  font-size: 48px;
-  color: #ff941c;
-  text-shadow: 0 0 20px #ff780066;
-  margin: 12px 0;
-}
-
-.crash-status {
-  color: #ffad45;
-  font-weight: bold;
-  margin-top: 8px;
-  min-height: 22px;
-}
-
-.crash-graph {
-  width: 100%;
-  height: 130px;
-  margin-top: 15px;
-  overflow: visible;
-}
-
-.crash-line {
-  fill: none;
-  stroke: #ff941c;
-  stroke-width: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 7px #ff8500);
-}
-
-.crash-area { fill: url(#crashGradient); }
-
-.crash-history {
-  text-align: center;
-  line
-
-
-<div>Раундов в истории</div>
-      <h2 style="color:#ff941c">${history.length}</h2>
-    </div>
-
-    <h3 style="color:#ff941c">🚀 Последние результаты</h3>
-
-    <div class="match">
-      ${
-        history.length
-          ? history.map(x => `<div>${escapeHtml(x)}</div>`).join("")
-          : "Пока нет сыгранных раундов"
-      }
-    </div>
-
-    <h3 style="color:#ff941c">⚙️ Настройки</h3>
-    <div class="match">
-      <div>Приложение AI BET</div>
-      <div class="info">Версия 1.0</div>
-    </div>
-  `;
-};
-</script>
-
-</body>
-</html>-he
-
-
-ight: 2.2;
-  color: #ffad45;
-}
-
-.crash-history-item {
-  display: inline-block;
-  padding: 7px 11px;
-  margin: 4px;
-  border-radius: 9px;
-  background: #30200e;
-  border: 1px solid #8a4b0c;
-  color: #ffad45;
-  font-weight: bold;
-}
-
-.crash-explosion {
-  animation: explosion 0.5s ease-in-out;
-}
-
-@keyframes explosion {
-  0% { transform: scale(0.5); opacity: 0; }
-  50% { transform: scale(1.5); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.profile-avatar {
-  width: 90px;
-  height: 90px;
-  margin: auto;
-  border-radius: 50%;
-  border: 3px solid #ff941c;
-  background: #38200b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-}
+*{box-sizing:border-box}
+body{margin:0;padding:22px 18px 110px;background:radial-gradient(ellipse at top,#30200f 0%,#111 42%,#080808 100%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;padding:8px 0 20px;border-bottom:1px solid #332416}
+h1{color:#ff8a00;font-size:29px;letter-spacing:1px;text-shadow:0 0 18px #ff800055;margin:0}
+.status{color:#ff9b28;font-size:12px;font-weight:bold}
+.welcome{margin:28px 0 20px}.welcome h2{font-size:25px;margin:0 0 8px}.welcome p{color:#999;font-size:14px;margin:0}
+button{width:100%;margin-top:13px;background:linear-gradient(135deg,#ff9d22,#f05b00);color:#111;border:0;border-radius:16px;padding:17px;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 5px 20px #ff780033;transition:.2s}
+button:active{transform:scale(.97)}button:disabled{opacity:.6}
+.content{margin-top:22px;padding:18px;background:linear-gradient(145deg,#1b1b1b,#111);border:1px solid #392817;border-radius:18px;min-height:110px;overflow-wrap:anywhere}
+.match{padding:16px;margin-bottom:13px;background:#222;border:1px solid #44301b;border-left:4px solid #ff8700;border-radius:13px;line-height:1.8}
+.match-name{font-size:17px;font-weight:bold;color:#fff}.info{color:#aaa;font-size:14px}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.feature-card{position:relative;min-height:175px;margin:0;padding:18px 13px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;background:linear-gradient(145deg,#25201a,#111);border:1px solid #70400f;border-radius:18px;color:white;text-align:left}
+.feature-icon{font-size:35px}.feature-title{font-size:19px;font-weight:900;color:#ff941c}.feature-description{font-size:12px;color:#aaa}
+.feature-arrow{position:absolute;right:15px;bottom:13px;color:#ff941c;font-size:22px}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;display:grid;grid-template-columns:repeat(4,1fr);background:#111;border-top:1px solid #493018;padding:10px 5px calc(10px + env(safe-area-inset-bottom));z-index:1000}
+.bottom-nav button{margin:0;padding:8px 2px;background:transparent;border:0;box-shadow:none;color:#999;font-size:21px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.bottom-nav button span{font-size:10px}.bottom-nav button:active{color:#ff941c}
+.crash-screen{position:relative;min-height:280px;background:radial-gradient(circle at center,#30200e,#101010 75%);border:1px solid #8a4b0c;border-radius:20px;padding:20px 12px;overflow:hidden;box-shadow:0 0 25px #ff850022;text-align:center;margin:18px 0}
+#crash-plane{display:inline-block;font-size:48px;filter:drop-shadow(0 0 12px #ff8a00);transition:transform .1s linear}
+#crash-number{font-size:48px;color:#ff941c;text-shadow:0 0 20px #ff780066;margin:12px 0}
+.crash-status{color:#ffad45;font-weight:bold;margin-top:8px;min-height:22px}
+.crash-graph{width:100%;height:130px;margin-top:15px;overflow:visible}
+.crash-line{fill:none;stroke:#ff941c;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px #ff8500)}
+.crash-area{fill:url(#crashGradient)}
+.crash-history{text-align:center;line-height:2.2;color:#ffad45}
+.crash-history-item{display:inline-block;padding:7px 11px;margin:4px;border-radius:9px;background:#30200e;border:1px solid #8a4b0c;color:#ffad45;font-weight:bold}
+.crash-explosion{animation:explosion .5s ease-in-out}
+@keyframes explosion{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.5);opacity:1}100%{transform:scale(1);opacity:1}}
+.profile-avatar{width:90px;height:90px;margin:auto;border-radius:50%;border:3px solid #ff941c;background:#38200b;display:flex;align-items:center;justify-content:center;font-size:40px}
+.demo-note{padding:11px 12px;border:1px solid #80500f;background:#2a1b0c;border-radius:12px;color:#ffc078;font-size:12px;line-height:1.5;margin:12px 0}
+.premium-label{display:inline-block;padding:5px 9px;border-radius:20px;background:#38230d;border:1px solid #a85c0a;color:#ffb24d;font-size:11px;font-weight:bold}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:2000;display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(7px)}
+.modal{width:100%;max-width:430px;max-height:90vh;overflow:auto;background:linear-gradient(155deg,#24190e,#101010 65%);border:1px solid #9a5a16;border-radius:22px;padding:23px 19px;box-shadow:0 0 35px #ff850033;text-align:center}
+.modal-logo{font-size:25px;font-weight:900;color:#ff941c;letter-spacing:1px}
+.modal h2{font-size:23px;line-height:1.2;margin:17px 0 10px}
+.modal p{color:#c4c4c4;font-size:14px;line-height:1.55}
+.modal-price{font-size:34px;font-weight:900;color:#ff9a24;margin:15px 0 2px}
+.modal-small{font-size:12px!important;color:#999!important}
+.card-number{padding:15px 10px;margin:13px 0;background:#101010;border:1px solid #68400f;border-radius:12px;font-size:19px;font-weight:bold;letter-spacing:1px;overflow-wrap:anywhere}
+.secondary-button{background:#292019;color:#ffb24d;border:1px solid #75430d;box-shadow:none}
+.hidden{display:none!important}
+@media(max-width:360px){body{padding-left:13px;padding-right:13px}.feature-card{min-height:155px;padding:14px 10px}.modal{padding:20px 15px}}
 </style>
 </head>
-
 <body>
-
 <header>
   <h1>⚡ AI BET</h1>
-  <div class="status">● ONLINE</div>
+  <div class="status" id="app-status">● DEMO MODE</div>
 </header>
 
 <section class="welcome">
@@ -294,25 +63,22 @@ ight: 2.2;
   <p>Матчи и игра CRASH</p>
 </section>
 
+<div id="mode-notice" class="demo-note">
+  ДЕМО-РЕЖИМ: без Premium вы не подключены к системе ставок. Коэффициенты в демо-режиме генерируются случайным образом и не являются реальными букмекерскими котировками.
+</div>
+
 <div class="feature-grid">
   <button class="feature-card" type="button" onclick="loadMatches()">
-    <span class="feature-icon">⚽</span>
-    <span class="feature-title">МАТЧИ</span>
-    <span class="feature-description">Спортивные события</span>
-    <span class="feature-arrow">→</span>
+    <span class="feature-icon">⚽</span><span class="feature-title">МАТЧИ</span>
+    <span class="feature-description">Спортивные события</span><span class="feature-arrow">→</span>
   </button>
-
   <button class="feature-card" type="button" onclick="openCrash()">
-    <span class="feature-icon">🚀</span>
-    <span class="feature-title">CRASH</span>
-    <span class="feature-description">Игра с коэффициентом</span>
-    <span class="feature-arrow">→</span>
+    <span class="feature-icon">🚀</span><span class="feature-title">CRASH</span>
+    <span class="feature-description">Демо-игра с коэффициентом</span><span class="feature-arrow">→</span>
   </button>
 </div>
 
-<div class="content" id="content">
-  Выбери нужный раздел.
-</div>
+<div class="content" id="content">Выбери нужный раздел.</div>
 
 <nav class="bottom-nav">
   <button onclick="goHome()">🏠<span>Главная</span></button>
@@ -321,150 +87,170 @@ ight: 2.2;
   <button onclick="openProfile()">👤<span>Профиль</span></button>
 </nav>
 
+<!-- Окно подписки -->
+<div class="modal-backdrop hidden" id="subscription-modal">
+  <div class="modal">
+    <div class="modal-logo">⚡ AI BET</div>
+    <div class="premium-label">PREMIUM ACCESS</div>
+    <h2>Для успешного использования приложения необходимо оформить подписку!</h2>
+    <p>Без подписки вы не подключены к нашей системе ставок, а коэффициенты отображаются случайным образом в демонстрационном режиме.</p>
+    <div class="modal-price">4 990 ₽</div>
+    <p class="modal-small">Пожизненный доступ · единоразовая оплата</p>
+    <button onclick="showPayment()">💎 ОФОРМИТЬ PREMIUM</button>
+    <button class="secondary-button" onclick="closeSubscription()">Продолжить в демо-режиме</button>
+  </div>
+</div>
+
+<!-- Окно реквизитов -->
+<div class="modal-backdrop hidden" id="payment-modal">
+  <div class="modal">
+    <div class="modal-logo">💎 AI BET PREMIUM</div>
+    <h2>Оплата пожизненного доступа</h2>
+    <div class="modal-price">4 990 ₽</div>
+    <p>Переведите указанную сумму по реквизитам:</p>
+    <div class="card-number" id="payment-card">5599 0020 9077 3930</div>
+    <button class="secondary-button" onclick="copyCard()">📋 СКОПИРОВАТЬ НОМЕР КАРТЫ</button>
+    <p class="modal-small">После перевода нажмите «Я оплатил». В этой версии приложение не проверяет поступление денег.</p>
+    <button onclick="activatePremium()">✅ Я ОПЛАТИЛ</button>
+    <button class="secondary-button" onclick="backToSubscription()">Назад</button>
+  </div>
+</div>
+
 <script>
 const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
 
-if (tg) {
-  tg.ready();
-  tg.expand();
-}
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "'"
-  })[char]);
-}
-
-// ИСТОРИЯ CRASH
-
+const PREMIUM_KEY = "aibet_premium_demo";
+window.isPremium = localStorage.getItem(PREMIUM_KEY) === "true";
 window.crashTimer = null;
 window.crashHistory = [];
 
-// ГЛАВНАЯ
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+
+function updateMode() {
+  const status = document.getElementById("app-status");
+  const notice = document.getElementById("mode-notice");
+  if (window.isPremium) {
+    status.textContent = "● PREMIUM";
+    status.style.color = "#48d597";
+    notice.classList.add("hidden");
+  } else {
+    status.textContent = "● DEMO MODE";
+    status.style.color = "#ff9b28";
+    notice.classList.remove("hidden");
+  }
+}
+
+function showSubscription() {
+  if (!window.isPremium) {
+    document.getElementById("subscription-modal").classList.remove("hidden");
+  }
+}
+function closeSubscription() {
+  document.getElementById("subscription-modal").classList.add("hidden");
+}
+function showPayment() {
+  closeSubscription();
+  document.getElementById("payment-modal").classList.remove("hidden");
+}
+function backToSubscription() {
+  document.getElementById("payment-modal").classList.add("hidden");
+  showSubscription();
+}
+async function copyCard() {
+  const card = "5599002090773930";
+  try {
+    await navigator.clipboard.writeText(card);
+    alert("Номер карты скопирован.");
+  } catch {
+    alert("Номер карты: " + card);
+  }
+}
+function activatePremium() {
+  // Внимание,обмануть приложение не получится! без фактической оплаты коэффициенты работают в демо режиме.
+  window.isPremium = true;
+  localStorage.setItem(PREMIUM_KEY, "true");
+  document.getElementById("payment-modal").classList.add("hidden");
+  updateMode();
+  alert("Premium активирован на этом устройстве.");
+}
 
 window.goHome = function() {
   clearInterval(window.crashTimer);
-  document.getElementById("content").innerHTML =
-    "Выбери нужный раздел.";
+  document.getElementById("content").innerHTML = "Выбери нужный раздел.";
 };
-
-// МАТЧИ
 
 window.loadMatches = async function() {
   clearInterval(window.crashTimer);
-
   const content = document.getElementById("content");
   content.innerHTML = "⏳ Загружаем матчи...";
-
   try {
     const response = await fetch("/api/matches");
-
-    if (!response.ok) {
-      throw new Error("Ошибка API: " + response.status);
-    }
-
+    if (!response.ok) throw new Error("Ошибка API: " + response.status);
     const data = await response.json();
-
-    const events = Array.isArray(data)
-      ? data
-      : Array.isArray(data?.events)
-        ? data.events
-        : [];
-
+    const events = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
     if (!events.length) {
       content.innerText = "Сегодня матчей не найдено.";
       return;
     }
-
-    content.innerHTML = events.map(e => `
-      <div class="match">
-        <div class="match-name">
-          ${escapeHtml(e.strEvent || "Матч")}
+    content.innerHTML = events.map(e => {
+      const demoOdds = (1.2 + Math.random() * 3.8).toFixed(2);
+      return `<div class="match">
+        <div class="match-name">${escapeHtml(e.strEvent || "Матч")}</div>
+        <div class="info">🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<br>
+        📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<br>
+        🕒 ${escapeHtml(e.strTime || "Время неизвестно")}</div>
+        <div style="margin-top:8px;color:#ffad45;font-weight:bold">
+          ${window.isPremium ? "Демо-коэффициент" : "Случайный демо-коэффициент"}: ${demoOdds}
         </div>
-        <div class="info">
-          🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}
-
-      📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}
-
- 
-     🕒 ${escapeHtml(e.strTime || "Время неизвестно")}
-        </div>
-      </div>
-    `).join("");
-
+      </div>`;
+    }).join("") + `<div class="demo-note">Коэффициенты здесь демонстрационные, не являются котировками букмекера и не предназначены для ставок на реальные деньги.</div>`;
   } catch (error) {
     content.innerText = "❌ " + error.message;
   }
 };
 
-// ОТОБРАЖЕНИЕ ИСТОРИИ
-
 function renderCrashHistory() {
   const history = document.getElementById("crash-history");
   if (!history) return;
-
   history.innerHTML = window.crashHistory.length
-    ? window.crashHistory.map(x =>
-        `<span class="crash-history-item">${escapeHtml(x)}</span>`
-      ).join("")
+    ? window.crashHistory.map(x => `<span class="crash-history-item">${escapeHtml(x)}</span>`).join("")
     : "Пока нет раундов";
 }
 
-// ОТКРЫТИЕ CRASH
-
 window.openCrash = function() {
   clearInterval(window.crashTimer);
-
-  const content = document.getElementById("content");
-
-  content.innerHTML = `
+  document.getElementById("content").innerHTML = `
     <div style="text-align:center">
       <h2 style="color:#ff941c">🚀 CRASH</h2>
-
       <div class="crash-screen">
-        <div id="crash-plane">✈️</div>
+        <div id="crash-plane">🚀</div>
         <h1 id="crash-number">1.00x</h1>
-        <div id="crash-status" class="crash-status">
-          Готов к запуску
-        </div>
-
+        <div id="crash-status" class="crash-status">Готов к запуску</div>
         <svg class="crash-graph" viewBox="0 0 320 150" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="crashGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ff941c" stop-opacity=".35"/>
-              <stop offset="100%" stop-color="#ff941c" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
+          <defs><linearGradient id="crashGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff941c" stop-opacity=".35"/>
+            <stop offset="100%" stop-color="#ff941c" stop-opacity="0"/>
+          </linearGradient></defs>
           <path id="crash-area" class="crash-area" d="M0 150 L0 140 L0 150 Z"></path>
           <path id="crash-line" class="crash-line" d="M0 140"></path>
         </svg>
-
         <div id="crash-explosion"></div>
       </div>
-
-      <button id="crash-start" onclick="startCrash()">
-        🚀 НАЧАТЬ РАУНД
-      </button>
-
+      <div class="demo-note">CRASH — демонстрационная игра. Результаты генерируются случайно и не связаны с реальными ставками.</div>
+      <button id="crash-start" onclick="startCrash()">🚀 НАЧАТЬ РАУНД</button>
       <h3>История раундов</h3>
-      <div id="crash-history" class="crash-history">
-        Пока нет раундов
-      </div>
-    </div>
-  `;
-
+      <div id="crash-history" class="crash-history">Пока нет раундов</div>
+    </div>`;
   renderCrashHistory();
 };
 
-// ЗАПУСК CRASH
-
 window.startCrash = function() {
   clearInterval(window.crashTimer);
-
   const number = document.getElementById("crash-number");
   const status = document.getElementById("crash-status");
   const plane = document.getElementById("crash-plane");
@@ -472,133 +258,80 @@ window.startCrash = function() {
   const graph = document.getElementById("crash-line");
   const area = document.getElementById("crash-area");
   const explosion = document.getElementById("crash-explosion");
-
   if (!number || !status || !plane || !button || !graph || !area) return;
 
-  let multiplier = 1;
-  let x = 0;
+  let multiplier = 1, x = 0;
   const crashAt = 1 + Math.random() * 9;
-  const points = [{x: 0, y: 140}];
-
-  graph.setAttribute("d", "M0 140");
-  area.setAttribute("d", "M0 150 L0 140 L0 150 Z");
-
+  const points = [{x:0,y:140}];
+  graph.setAttribute("d","M0 140");
+  area.setAttribute("d","M0 150 L0 140 L0 150 Z");
   number.style.color = "#39d98a";
-  plane.style.transform = "translate(0, 0) rotate(0deg)";
+  plane.style.transform = "translate(0,0) rotate(0deg)";
   button.disabled = true;
-  button.innerText = "✈️ ПОЛЁТ...";
-  status.innerText = "Коэффициент растёт!";
+  button.innerText = "🚀 ПОЛЁТ...";
+  status.innerText = "Демо-коэффициент растёт!";
   if (explosion) explosion.innerHTML = "";
 
   window.crashTimer = setInterval(() => {
     multiplier += 0.01 + multiplier * 0.012;
     x = Math.min(x + 4, 320);
-
     const y = Math.max(10, 140 - (multiplier - 1) * 15);
-    points.push({x, y});
-
-    graph.setAttribute(
-      "d",
-      "M" + points.map(p => p.x + " " + p.y).join(" L")
-    );
-
-    area.setAttribute(
-      "d",
-      "M0 150 L" +
-      points.map(p => p.x + " " + p.y).join(" L") +
-      " L" + x + " 150 Z"
-    );
-
+    points.push({x,y});
+    graph.setAttribute("d","M" + points.map(p => p.x + " " + p.y).join(" L"));
+    area.setAttribute("d","M0 150 L" + points.map(p => p.x + " " + p.y).join(" L") + " L" + x + " 150 Z");
     number.innerText = multiplier.toFixed(2) + "x";
-
-    plane.style.transform =
-      "translate(" + Math.min(x * 0.65, 200) + "px, -" +
-      Math.min((140 - y) * 0.5, 65) + "px) rotate(-8deg)";
-
+    plane.style.transform = "translate(" + Math.min(x*.65,200) + "px,-" + Math.min((140-y)*.5,65) + "px) rotate(-8deg)";
     if (multiplier >= crashAt) {
       clearInterval(window.crashTimer);
-
       const result = crashAt.toFixed(2) + "x";
-
       number.innerText = result;
       number.style.color = "#ff4545";
-      status.innerText = "💥 CRASH! Самолёт упал.";
-
-      plane.style.transition = "transform 0.5s ease-in";
-      plane.style.transform = "translate(210px, 35px) rotate(70deg)";
-
-      if (explosion) {
-        explosion.innerHTML = '<div class="crash-explosion" style="font-size:42px">💥</div>';
-      }
-
+      status.innerText = "💥 CRASH! Раунд завершён.";
+      plane.style.transition = "transform .5s ease-in";
+      plane.style.transform = "translate(210px,35px) rotate(70deg)";
+      if (explosion) explosion.innerHTML = '<div class="crash-explosion" style="font-size:42px">💥</div>';
       window.crashHistory.unshift(result);
-      window.crashHistory = window.crashHistory.slice(0, 10);
-
+      window.crashHistory = window.crashHistory.slice(0,10);
       renderCrashHistory();
-
       button.disabled = false;
       button.innerText = "🔄 НОВЫЙ РАУНД";
     }
-  }, 100);
+  },100);
 };
-
-// ПРОФИЛЬ
 
 window.openProfile = function() {
   clearInterval(window.crashTimer);
-
-  const content = document.getElementById("content");
-  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-
-  const name = user
-    ? [user.first_name, user.last_name].filter(Boolean).join(" ")
-    : "Гость";
-
-  const username = user?.username
-    ? "@" + user.username
-    : "Не указан";
-
+  const user = tg?.initDataUnsafe?.user;
+  const name = user ? [user.first_name,user.last_name].filter(Boolean).join(" ") : "Гость";
+  const username = user?.username ? "@" + user.username : "Не указан";
   const history = window.crashHistory || [];
-
-  content.innerHTML = `
+  document.getElementById("content").innerHTML = `
     <div style="text-align:center;padding:15px 0">
       <div class="profile-avatar">👤</div>
       <h2 style="color:#ff941c">${escapeHtml(name)}</h2>
       <p style="color:#999">${escapeHtml(username)}</p>
+      <span class="premium-label">${window.isPremium ? "💎 PREMIUM АКТИВЕН" : "DEMO / БЕЗ PREMIUM"}</span>
     </div>
-
     <h3 style="color:#ff941c">📊 Моя статистика</h3>
-
-    <div class="match
-
-
-<div>Раундов в истории</div>
-      <h2 style="color:#ff941c">${history.length}</h2>
-    </div>
-
+    <div class="match"><div>Раундов в истории</div><h2 style="color:#ff941c">${history.length}</h2></div>
     <h3 style="color:#ff941c">🚀 Последние результаты</h3>
-
-    <div class="match">
-      ${
-        history.length
-          ? history.map(x => `<div>${escapeHtml(x)}</div>`).join("")
-          : "Пока нет сыгранных раундов"
-      }
-    </div>
-
+    <div class="match">${history.length ? history.map(x => `<div>${escapeHtml(x)}</div>`).join("") : "Пока нет сыгранных раундов"}</div>
     <h3 style="color:#ff941c">⚙️ Настройки</h3>
-    <div class="match">
-      <div>Приложение AI BET</div>
-      <div class="info">Версия 1.0</div>
-    </div>
-  `;
+    <div class="match"><div>Приложение AI BET</div><div class="info">Версия 1.1</div></div>
+    ${window.isPremium ? '<button class="secondary-button" onclick="resetDemoPremium()">Сбросить демонстрационный Premium</button>' : '<button onclick="showSubscription()">💎 ОФОРМИТЬ PREMIUM</button>'}`;
 };
+
+function resetDemoPremium() {
+  window.isPremium = false;
+  localStorage.removeItem(PREMIUM_KEY);
+  updateMode();
+  openProfile();
+}
+
+updateMode();
+window.addEventListener("load", () => {
+  if (!window.isPremium) showSubscription();
+});
 </script>
-
 </body>
-</html>">
-
-
-
-
-
+</html>
