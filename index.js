@@ -96,7 +96,11 @@ async function getSportsEvents() {
   
 
 bot.command("start", async (ctx) => {
+  bot.command("id", async (ctx) => {
   await ctx.reply(
+    `🆔 Твой Telegram ID: ${ctx.from.id}`
+  );
+});
     "🤖 Добро пожаловать в AI BET!\n\nНажми кнопку ниже, чтобы открыть приложение:",
     {
       reply_markup: {
