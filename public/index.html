@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -49,288 +50,495 @@ button:active{transform:scale(.97)}button:disabled{opacity:.6}
 .card-number{padding:15px 10px;margin:13px 0;background:#101010;border:1px solid #68400f;border-radius:12px;font-size:19px;font-weight:bold;letter-spacing:1px;overflow-wrap:anywhere}
 .secondary-button{background:#292019;color:#ffb24d;border:1px solid #75430d;box-shadow:none}
 .hidden{display:none!important}
+.slot-card{padding:15px;margin:12px 0;background:linear-gradient(145deg,#292017,#121212);border:1px solid #70400f;border-radius:15px;display:flex;align-items:center;gap:13px;text-align:left}
+.slot-icon{font-size:34px}
+.slot-name{font-size:15px;font-weight:900;color:#fff}
+.slot-description{font-size:12px;color:#999;margin-top:5px}
+.slot-select{width:100%;padding:14px;background:#171717;color:#ffb24d;border:1px solid #80500f;border-radius:12px;font-size:15px;margin-top:8px}
+.signal-box{background:radial-gradient(circle,#38240d,#111);border:1px solid #a85c0a;border-radius:18px;padding:20px;text-align:center;margin-top:15px}
+.signal-number{font-size:38px;font-weight:900;color:#ff941c;margin:12px 0}
+.signal-label{color:#aaa;font-size:12px}
+.signal-history{padding:11px;background:#222;border-radius:10px;margin-top:8px;color:#ffad45;font-size:13px}
 @media(max-width:360px){body{padding-left:13px;padding-right:13px}.feature-card{min-height:155px;padding:14px 10px}.modal{padding:20px 15px}}
 </style>
 </head>
 <body>
+
 <header>
-  <h1>⚡ AI BET</h1>
-  <div class="status" id="app-status">● DEMO MODE</div>
+<h1>⚡ AI BET</h1>
+<div class="status" id="app-status">● DEMO MODE</div>
 </header>
 
 <section class="welcome">
-  <h2>Спортивная платформа</h2>
-  <p>Матчи и игра CRASH</p>
+<h2>Спортивная платформа</h2>
+<p>Матчи, CRASH и SLOTS AI</p>
 </section>
 
 <div id="mode-notice" class="demo-note">
-  ДЕМО-РЕЖИМ: без Premium вы не подключены к системе ставок. Коэффициенты в демо-режиме генерируются случайным образом и не являются реальными букмекерскими котировками.
+ДЕМО-РЕЖИМ: без Premium вы не подключены к системе ставок. Коэффициенты в демо-режиме генерируются случайным образом.
 </div>
 
 <div class="feature-grid">
-  <button class="feature-card" type="button" onclick="loadMatches()">
-    <span class="feature-icon">⚽</span><span class="feature-title">МАТЧИ</span>
-    <span class="feature-description">Спортивные события</span><span class="feature-arrow">→</span>
-  </button>
-  <button class="feature-card" type="button" onclick="openCrash()">
-    <span class="feature-icon">🚀</span><span class="feature-title">CRASH</span>
-    <span class="feature-description">Демо-игра с коэффициентом</span><span class="feature-arrow">→</span>
-  </button>
+<button class="feature-card" type="button" onclick="loadMatches()">
+<span class="feature-icon">⚽</span>
+<span class="feature-title">МАТЧИ</span>
+<span class="feature-description">Спортивные события</span>
+<span class="feature-arrow">→</span>
+</button>
+
+<button class="feature-card" type="button" onclick="openCrash()">
+<span class="feature-icon">🚀</span>
+<span class="feature-title">CRASH</span>
+<span class="feature-description">Демо-игра с коэффициентом</span>
+<span class="feature-arrow">→</span>
+</button>
+
+<button class="feature-card" type="button" onclick="openSlots()">
+<span class="feature-icon">🎰</span>
+<span class="feature-title">SLOTS AI</span>
+<span class="premium-label">PREMIUM ONLY</span>
+<span class="feature-description">Генератор игровых сигналов</span>
+<span class="feature-arrow">→</span>
+</button>
 </div>
 
 <div class="content" id="content">Выбери нужный раздел.</div>
 
 <nav class="bottom-nav">
-  <button onclick="goHome()">🏠<span>Главная</span></button>
-  <button onclick="loadMatches()">⚽<span>Матчи</span></button>
-  <button onclick="openCrash()">🚀<span>CRASH</span></button>
-  <button onclick="openProfile()">👤<span>Профиль</span></button>
+<button onclick="goHome()">🏠<span>Главная</span></button>
+<button onclick="loadMatches()">⚽<span>Матчи</span></button>
+<button onclick="openCrash()">🚀<span>CRASH</span></button>
+<button onclick="openProfile()">👤<span>Профиль</span></button>
 </nav>
 
-<!-- Окно подписки -->
+<!-- AI BET PREMIUM -->
 <div class="modal-backdrop hidden" id="subscription-modal">
-  <div class="modal">
-    <div class="modal-logo">⚡ AI BET</div>
-    <div class="premium-label">PREMIUM ACCESS</div>
-    <h2>Для успешного использования приложения необходимо оформить подписку!</h2>
-    <p>Без подписки вы не подключены к нашей системе ставок, а коэффициенты отображаются случайным образом в демонстрационном режиме.</p>
-    <div class="modal-price">4 990 ₽</div>
-    <p class="modal-small">Пожизненный доступ · единоразовая оплата</p>
-    <button onclick="showPayment()">💎 ОФОРМИТЬ PREMIUM</button>
-    <button class="secondary-button" onclick="closeSubscription()">Продолжить в демо-режиме</button>
-  </div>
+<div class="modal">
+<div class="modal-logo">⚡ AI BET</div>
+<div class="premium-label">PREMIUM ACCESS</div>
+<h2>Для успешного использования приложения необходимо оформить подписку!</h2>
+<p>Без подписки вы не подключены к нашей системе ставок, а коэффициенты отображаются случайным образом в демонстрационном режиме.</p>
+<div class="modal-price">4 990 ₽</div>
+<p class="modal-small">Пожизненный доступ · единоразовая оплата</p>
+<button onclick="showPayment()">💎 ОФОРМИТЬ PREMIUM</button>
+<button class="secondary-button" onclick="closeSubscription()">Продолжить в демо-режиме</button>
+</div>
 </div>
 
-<!-- Окно реквизитов -->
+<!-- AI BET PAYMENT -->
 <div class="modal-backdrop hidden" id="payment-modal">
-  <div class="modal">
-    <div class="modal-logo">💎 AI BET PREMIUM</div>
-    <h2>Оплата пожизненного доступа</h2>
-    <div class="modal-price">4 990 ₽</div>
-    <p>Переведите указанную сумму по реквизитам:</p>
-    <div class="card-number" id="payment-card">5599 0020 9077 3930</div>
-    <button class="secondary-button" onclick="copyCard()">📋 СКОПИРОВАТЬ НОМЕР КАРТЫ</button>
-    <p class="modal-small">⚠️ Внимание! Приложение обмануть не получится! Без фактической оплаты аккаунт автоматически переводится в демо-режим.</p>
-    <button onclick="activatePremium()">✅ Я ОПЛАТИЛ</button>
-    <button class="secondary-button" onclick="backToSubscription()">Назад</button>
-  </div>
+<div class="modal">
+<div class="modal-logo">💎 AI BET PREMIUM</div>
+<h2>Оплата пожизненного доступа</h2>
+<div class="modal-price">4 990 ₽</div>
+<p>Переведите указанную сумму по реквизитам:</p>
+<div class="card-number" id="payment-card">5599 0020 9077 3930</div>
+<button class="secondary-button" onclick="copyCard()">📋 СКОПИРОВАТЬ НОМЕР КАРТЫ</button>
+<p class="modal-small">⚠️ Доступ предоставляется после фактической оплаты. Нажатие кнопки само по себе не подтверждает перевод.</p>
+<button onclick="activatePremium()">✅ Я ОПЛАТИЛ</button>
+<button class="secondary-button" onclick="backToSubscription()">Назад</button>
+</div>
+</div>
+
+<!-- SLOTS AI PREMIUM OFFER -->
+<div class="modal-backdrop hidden" id="slots-subscription-modal">
+<div class="modal">
+<div class="modal-logo">🎰 SLOTS AI</div>
+<div class="premium-label">EXCLUSIVE PREMIUM</div>
+<h2>Открой доступ к SLOTS AI</h2>
+<p>Эксклюзивный игровой режим с генератором случайных сигналов и расширенными настройками.</p>
+<div style="text-align:left;margin:18px 0">
+<p>🎰 Выбор игровых автоматов</p>
+<p>⚡ Генерация случайных сигналов</p>
+<p>💰 Настройка номинала от 40 до 1000 ₽</p>
+<p>📊 История генераций</p>
+<p>💎 Эксклюзивный интерфейс SLOTS AI</p>
+</div>
+<div class="modal-price">7 990 ₽</div>
+<p class="modal-small">Пожизненный доступ · единоразовая оплата</p>
+<button onclick="showSlotsPayment()">🔓 КУПИТЬ SLOTS AI</button>
+<button class="secondary-button" onclick="closeSlotsSubscription()">Назад</button>
+</div>
+</div>
+
+<!-- SLOTS AI PAYMENT -->
+<div class="modal-backdrop hidden" id="slots-payment-modal">
+<div class="modal">
+<div class="modal-logo">💎 SLOTS AI PREMIUM</div>
+<h2>Оплата пожизненного доступа</h2>
+<div class="modal-price">7 990 ₽</div>
+<p>Переведите указанную сумму по реквизитам:</p>
+<div class="card-number">5599 0020 9077 3930</div>
+<button class="secondary-button" onclick="copyCard()">📋 СКОПИРОВАТЬ НОМЕР КАРТЫ</button>
+<p class="modal-small">⚠️ Доступ предоставляется после фактической оплаты. Нажатие кнопки само по себе не подтверждает перевод.</p>
+<button onclick="activateSlotsPremium()">✅ Я ОПЛАТИЛ</button>
+<button class="secondary-button" onclick="backToSlotsSubscription()">Назад</button>
+</div>
 </div>
 
 <script>
 const tg = window.Telegram?.WebApp;
-if (tg) { tg.ready(); tg.expand(); }
+if(tg){tg.ready();tg.expand();}
 
-const PREMIUM_KEY = "aibet_premium_demo";
-window.isPremium = localStorage.getItem(PREMIUM_KEY) === "true";
-window.crashTimer = null;
-window.crashHistory = [];
+const PREMIUM_KEY="aibet_premium_demo";
+const SLOTS_KEY="aibet_slots_premium_demo";
 
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
-  })[char]);
-}
+window.isPremium=localStorage.getItem(PREMIUM_KEY)==="true";
+window.slotsPremium=localStorage.getItem(SLOTS_KEY)==="true";
+window.crashTimer=null;
+window.crashHistory=[];
 
-function updateMode() {
-  const status = document.getElementById("app-status");
-  const notice = document.getElementById("mode-notice");
-  if (window.isPremium) {
-    status.textContent = "● PREMIUM";
-    status.style.color = "#48d597";
-    notice.classList.add("hidden");
-  } else {
-    status.textContent = "● DEMO MODE";
-    status.style.color = "#ff9b28";
-    notice.classList.remove("hidden");
-  }
+window.slotHistory=JSON.parse(localStorage.getItem("aibet_slot_history")||"[]");
+
+function escapeHtml(value){
+return String(value??"").replace(/[&<>"']/g,char=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+})[char]);
 }
 
-function showSubscription() {
-  if (!window.isPremium) {
-    document.getElementById("subscription-modal").classList.remove("hidden");
-  }
+function updateMode(){
+const status=document.getElementById("app-status");
+const notice=document.getElementById("mode-notice");
+
+if(window.isPremium){
+status.textContent="● PREMIUM";
+status.style.color="#48d597";
+notice.classList.add("hidden");
+}else{
+status.textContent="● DEMO MODE";
+status.style.color="#ff9b28";
+notice.classList.remove("hidden");
 }
-function closeSubscription() {
-  document.getElementById("subscription-modal").classList.add("hidden");
-}
-function showPayment() {
-  closeSubscription();
-  document.getElementById("payment-modal").classList.remove("hidden");
-}
-function backToSubscription() {
-  document.getElementById("payment-modal").classList.add("hidden");
-  showSubscription();
-}
-async function copyCard() {
-  const card = "5599002090773930";
-  try {
-    await navigator.clipboard.writeText(card);
-    alert("Номер карты скопирован.");
-  } catch {
-    alert("Номер карты: " + card);
-  }
-}
-function activatePremium() {
-  // Внимание,обмануть приложение не получится! без фактической оплаты коэффициенты работают в демо режиме.
-  window.isPremium = true;
-  localStorage.setItem(PREMIUM_KEY, "true");
-  document.getElementById("payment-modal").classList.add("hidden");
-  updateMode();
-  alert("Premium активирован на этом устройстве.");
 }
 
-window.goHome = function() {
-  clearInterval(window.crashTimer);
-  document.getElementById("content").innerHTML = "Выбери нужный раздел.";
+function showSubscription(){
+if(!window.isPremium)
+document.getElementById("subscription-modal").classList.remove("hidden");
+}
+
+function closeSubscription(){
+document.getElementById("subscription-modal").classList.add("hidden");
+}
+
+function showPayment(){
+closeSubscription();
+document.getElementById("payment-modal").classList.remove("hidden");
+}
+
+function backToSubscription(){
+document.getElementById("payment-modal").classList.add("hidden");
+showSubscription();
+}
+
+function closeSlotsSubscription(){
+document.getElementById("slots-subscription-modal").classList.add("hidden");
+}
+
+function showSlotsPayment(){
+closeSlotsSubscription();
+document.getElementById("slots-payment-modal").classList.remove("hidden");
+}
+
+function backToSlotsSubscription(){
+document.getElementById("slots-payment-modal").classList.add("hidden");
+document.getElementById("slots-subscription-modal").classList.remove("hidden");
+}
+
+async function copyCard(){
+const card="5599002090773930";
+try{
+await navigator.clipboard.writeText(card);
+alert("Номер карты скопирован.");
+}catch{
+alert("Номер карты: "+card);
+}
+}
+
+function activatePremium(){
+alert("Это демонстрационная разблокировка. Перевод не проверен.");
+window.isPremium=true;
+localStorage.setItem(PREMIUM_KEY,"true");
+document.getElementById("payment-modal").classList.add("hidden");
+updateMode();
+}
+
+function activateSlotsPremium(){
+alert("Это демонстрационная разблокировка SLOTS AI. Перевод не проверен.");
+window.slotsPremium=true;
+localStorage.setItem(SLOTS_KEY,"true");
+document.getElementById("slots-payment-modal").classList.add("hidden");
+openSlots();
+}
+
+window.goHome=function(){
+clearInterval(window.crashTimer);
+document.getElementById("content").innerHTML="Выбери нужный раздел.";
 };
 
-window.loadMatches = async function() {
-  clearInterval(window.crashTimer);
-  const content = document.getElementById("content");
-  content.innerHTML = "⏳ Загружаем матчи...";
-  try {
-    const response = await fetch("/api/matches");
-    if (!response.ok) throw new Error("Ошибка API: " + response.status);
-    const data = await response.json();
-    const events = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
-    if (!events.length) {
-      content.innerText = "Сегодня матчей не найдено.";
-      return;
-    }
-    content.innerHTML = events.map(e => {
-      const demoOdds = (1.2 + Math.random() * 3.8).toFixed(2);
-      return `<div class="match">
-        <div class="match-name">${escapeHtml(e.strEvent || "Матч")}</div>
-        <div class="info">🏆 ${escapeHtml(e.strLeague || e.strSport || "Спорт")}<br>
-        📅 ${escapeHtml(e.dateEvent || "Дата неизвестна")}<br>
-        🕒 ${escapeHtml(e.strTime || "Время неизвестно")}</div>
-        <div style="margin-top:8px;color:#ffad45;font-weight:bold">
-          ${window.isPremium ? "Демо-коэффициент" : "Случайный демо-коэффициент"}: ${demoOdds}
-        </div>
-      </div>`;
-    }).join("") + `<div class="demo-note">Коэффициенты здесь демонстрационные, не являются котировками букмекера и не предназначены для ставок на реальные деньги.</div>`;
-  } catch (error) {
-    content.innerText = "❌ " + error.message;
-  }
+window.loadMatches=async function(){
+clearInterval(window.crashTimer);
+const content=document.getElementById("content");
+content.innerHTML="⏳ Загружаем матчи...";
+try{
+const response=await fetch("/api/matches");
+if(!response.ok)throw new Error("Ошибка API: "+response.status);
+const data=await response.json();
+const events=Array.isArray(data)?data:(Array.isArray(data?.events)?data.events:[]);
+if(!events.length){
+content.innerText="Сегодня матчей не найдено.";
+return;
+}
+content.innerHTML=events.map(e=>{
+const demoOdds=(1.2+Math.random()*3.8).toFixed(2);
+return `<div class="match">
+<div class="match-name">${escapeHtml(e.strEvent||"Матч")}</div>
+<div class="info">🏆 ${escapeHtml(e.strLeague||e.strSport||"Спорт")}<br>
+📅 ${escapeHtml(e.dateEvent||"Дата неизвестна")}<br>
+🕒 ${escapeHtml(e.strTime||"Время неизвестно")}</div>
+<div style="margin-top:8px;color:#ffad45;font-weight:bold">
+Демо-коэффициент: ${demoOdds}
+</div></div>`;
+}).join("")+
+`<div class="demo-note">Коэффициенты демонстрационные и не являются котировками букмекера.</div>`;
+}catch(error){
+content.innerText="❌ "+error.message;
+}
 };
 
-function renderCrashHistory() {
-  const history = document.getElementById("crash-history");
-  if (!history) return;
-  history.innerHTML = window.crashHistory.length
-    ? window.crashHistory.map(x => `<span class="crash-history-item">${escapeHtml(x)}</span>`).join("")
-    : "Пока нет раундов";
+function renderCrashHistory(){
+const history=document.getElementById("crash-history");
+if(!history)return;
+history.innerHTML=window.crashHistory.length?
+window.crashHistory.map(x=>`<span class="crash-history-item">${escapeHtml(x)}</span>`).join(""):"Пока нет раундов";
 }
 
-window.openCrash = function() {
-  clearInterval(window.crashTimer);
-  document.getElementById("content").innerHTML = `
-    <div style="text-align:center">
-      <h2 style="color:#ff941c">🚀 CRASH</h2>
-      <div class="crash-screen">
-        <div id="crash-plane">🚀</div>
-        <h1 id="crash-number">1.00x</h1>
-        <div id="crash-status" class="crash-status">Готов к запуску</div>
-        <svg class="crash-graph" viewBox="0 0 320 150" preserveAspectRatio="none">
-          <defs><linearGradient id="crashGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#ff941c" stop-opacity=".35"/>
-            <stop offset="100%" stop-color="#ff941c" stop-opacity="0"/>
-          </linearGradient></defs>
-          <path id="crash-area" class="crash-area" d="M0 150 L0 140 L0 150 Z"></path>
-          <path id="crash-line" class="crash-line" d="M0 140"></path>
-        </svg>
-        <div id="crash-explosion"></div>
-      </div>
-      <div class="demo-note">CRASH — демонстрационная игра. Результаты генерируются случайно и не связаны с реальными ставками.</div>
-      <button id="crash-start" onclick="startCrash()">🚀 НАЧАТЬ РАУНД</button>
-      <h3>История раундов</h3>
-      <div id="crash-history" class="crash-history">Пока нет раундов</div>
-    </div>`;
-  renderCrashHistory();
+window.openCrash=function(){
+clearInterval(window.crashTimer);
+document.getElementById("content").innerHTML=`
+<div style="text-align:center">
+<h2 style="color:#ff941c">🚀 CRASH</h2>
+<div class="crash-screen">
+<div id="crash-plane">🚀</div>
+<h1 id="crash-number">1.00x</h1>
+<div id="crash-status" class="crash-status">Готов к запуску</div>
+<svg class="crash-graph" viewBox="0 0 320 150" preserveAspectRatio="none">
+<defs><linearGradient id="crashGradient" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#ff941c" stop-opacity=".35"/>
+<stop offset="100%" stop-color="#ff941c" stop-opacity="0"/>
+</linearGradient></defs>
+<path id="crash-area" class="crash-area" d="M0 150 L0 140 L0 150 Z"></path>
+<path id="crash-line" class="crash-line" d="M0 140"></path>
+</svg>
+<div id="crash-explosion"></div>
+</div>
+<div class="demo-note">CRASH — демонстрационная игра. Результаты генерируются случайно.</div>
+<button id="crash-start" onclick="startCrash()">🚀 НАЧАТЬ РАУНД</button>
+<h3>История раундов</h3>
+<div id="crash-history" class="crash-history">Пока нет раундов</div>
+</div>`;
+renderCrashHistory();
 };
 
-window.startCrash = function() {
-  clearInterval(window.crashTimer);
-  const number = document.getElementById("crash-number");
-  const status = document.getElementById("crash-status");
-  const plane = document.getElementById("crash-plane");
-  const button = document.getElementById("crash-start");
-  const graph = document.getElementById("crash-line");
-  const area = document.getElementById("crash-area");
-  const explosion = document.getElementById("crash-explosion");
-  if (!number || !status || !plane || !button || !graph || !area) return;
+window.startCrash=function(){
+clearInterval(window.crashTimer);
+const number=document.getElementById("crash-number");
+const status=document.getElementById("crash-status");
+const plane=document.getElementById("crash-plane");
+const button=document.getElementById("crash-start");
+const graph=document.getElementById("crash-line");
+const area=document.getElementById("crash-area");
+const explosion=document.getElementById("crash-explosion");
+if(!number||!status||!plane||!button||!graph||!area)return;
 
-  let multiplier = 1, x = 0;
-  const crashAt = 1 + Math.random() * 9;
-  const points = [{x:0,y:140}];
-  graph.setAttribute("d","M0 140");
-  area.setAttribute("d","M0 150 L0 140 L0 150 Z");
-  number.style.color = "#39d98a";
-  plane.style.transform = "translate(0,0) rotate(0deg)";
-  button.disabled = true;
-  button.innerText = "🚀 ПОЛЁТ...";
-  status.innerText = "Демо-коэффициент растёт!";
-  if (explosion) explosion.innerHTML = "";
+let multiplier=1,x=0;
+const crashAt=1+Math.random()*9;
+const points=[{x:0,y:140}];
+graph.setAttribute("d","M0 140");
+area.setAttribute("d","M0 150 L0 140 L0 150 Z");
+number.style.color="#39d98a";
+plane.style.transform="translate(0,0) rotate(0deg)";
+button.disabled=true;
+button.innerText="🚀 ПОЛЁТ...";
+status.innerText="Демо-коэффициент растёт!";
+if(explosion)explosion.innerHTML="";
 
-  window.crashTimer = setInterval(() => {
-    multiplier += 0.01 + multiplier * 0.012;
-    x = Math.min(x + 4, 320);
-    const y = Math.max(10, 140 - (multiplier - 1) * 15);
-    points.push({x,y});
-    graph.setAttribute("d","M" + points.map(p => p.x + " " + p.y).join(" L"));
-    area.setAttribute("d","M0 150 L" + points.map(p => p.x + " " + p.y).join(" L") + " L" + x + " 150 Z");
-    number.innerText = multiplier.toFixed(2) + "x";
-    plane.style.transform = "translate(" + Math.min(x*.65,200) + "px,-" + Math.min((140-y)*.5,65) + "px) rotate(-8deg)";
-    if (multiplier >= crashAt) {
-      clearInterval(window.crashTimer);
-      const result = crashAt.toFixed(2) + "x";
-      number.innerText = result;
-      number.style.color = "#ff4545";
-      status.innerText = "💥 CRASH! Раунд завершён.";
-      plane.style.transition = "transform .5s ease-in";
-      plane.style.transform = "translate(210px,35px) rotate(70deg)";
-      if (explosion) explosion.innerHTML = '<div class="crash-explosion" style="font-size:42px">💥</div>';
-      window.crashHistory.unshift(result);
-      window.crashHistory = window.crashHistory.slice(0,10);
-      renderCrashHistory();
-      button.disabled = false;
-      button.innerText = "🔄 НОВЫЙ РАУНД";
-    }
-  },100);
-};
+window.crashTimer=setInterval(()=>{
+multiplier+=0.01+multiplier*0.012;
+x=Math.min(x+4,320);
+const y=Math.max(10,140-(multiplier-1)*15);
+points.push({x,y});
+graph.setAttribute("d","M"+points.map(p=>p.x+" "+p.y).join(" L"));
+area.setAttribute("d","M0 150 L"+points.map(p=>p.x+" "+p.y).join(" L")+" L"+x+" 150 Z");
+number.innerText=multiplier.toFixed(2)+"x";
+plane.style.transform="translate("+Math.min(x*.65,200)+"px,-"+Math.min((140-y)*.5,65)+"px) rotate(-8deg)";
 
-window.openProfile = function() {
-  clearInterval(window.crashTimer);
-  const user = tg?.initDataUnsafe?.user;
-  const name = user ? [user.first_name,user.last_name].filter(Boolean).join(" ") : "Гость";
-  const username = user?.username ? "@" + user.username : "Не указан";
-  const history = window.crashHistory || [];
-  document.getElementById("content").innerHTML = `
-    <div style="text-align:center;padding:15px 0">
-      <div class="profile-avatar">👤</div>
-      <h2 style="color:#ff941c">${escapeHtml(name)}</h2>
-      <p style="color:#999">${escapeHtml(username)}</p>
-      <span class="premium-label">${window.isPremium ? "💎 PREMIUM АКТИВЕН" : "DEMO / БЕЗ PREMIUM"}</span>
-    </div>
-    <h3 style="color:#ff941c">📊 Моя статистика</h3>
-    <div class="match"><div>Раундов в истории</div><h2 style="color:#ff941c">${history.length}</h2></div>
-    <h3 style="color:#ff941c">🚀 Последние результаты</h3>
-    <div class="match">${history.length ? history.map(x => `<div>${escapeHtml(x)}</div>`).join("") : "Пока нет сыгранных раундов"}</div>
-    <h3 style="color:#ff941c">⚙️ Настройки</h3>
-    <div class="match"><div>Приложение AI BET</div><div class="info">Версия 1.1</div></div>
-    ${window.isPremium ? '<button class="secondary-button" onclick="resetDemoPremium()">Сбросить демонстрационный Premium</button>' : '<button onclick="showSubscription()">💎 ОФОРМИТЬ PREMIUM</button>'}`;
-};
-
-function resetDemoPremium() {
-  window.isPremium = false;
-  localStorage.removeItem(PREMIUM_KEY);
-  updateMode();
-  openProfile();
+if(multiplier>=crashAt){
+clearInterval(window.crashTimer);
+const result=crashAt.toFixed(2)+"x";
+number.innerText=result;
+number.style.color="#ff4545";
+status.innerText="💥 CRASH! Раунд завершён.";
+plane.style.transition="transform .5s ease-in";
+plane.style.transform="translate(210px,35px) rotate(70deg)";
+if(explosion)explosion.innerHTML='<div class="crash-explosion" style="font-size:42px">💥</div>';
+window.crashHistory.unshift(result);
+window.crashHistory=window.crashHistory.slice(0,10);
+renderCrashHistory();
+button.disabled=false;
+button.innerText="🔄 НОВЫЙ РАУНД";
 }
+},100);
+};
+
+/* SLOTS AI */
+
+window.openSlots=function(){
+clearInterval(window.crashTimer);
+
+if(!window.slotsPremium){
+document.getElementById("slots-subscription-modal").classList.remove("hidden");
+return;
+}
+
+document.getElementById("slots-subscription-modal").classList.add("hidden");
+
+document.getElementById("content").innerHTML=`
+<div style="text-align:center">
+<h2 style="color:#ff941c;font-size:26px">🎰 SLOTS AI</h2>
+<span class="premium-label">💎 PREMIUM ACTIVE</span>
+<p style="color:#aaa;font-size:13px">Генератор случайных игровых сигналов</p>
+
+<div class="slot-card">
+<div class="slot-icon">🎰</div>
+<div>
+<div class="slot-name">SLOTS AI GENERATOR</div>
+<div class="slot-description">Персональная панель игровых сигналов</div>
+</div>
+</div>
+
+<div style="text-align:left;margin-top:20px">
+<label style="color:#ffad45;font-weight:bold">ВЫБЕРИ ИГРОВОЙ АВТОМАТ</label>
+<select class="slot-select" id="slot-game">
+<option value="Gates of Olympus">⚡ Gates of Olympus</option>
+<option value="Sweet Bonanza">🍬 Sweet Bonanza</option>
+<option value="Big Bass Bonanza">🐟 Big Bass Bonanza</option>
+<option value="Book of Dead">📖 Book of Dead</option>
+<option value="Sugar Rush">🍭 Sugar Rush</option>
+<option value="Wanted Dead or a Wild">🤠 Wanted Dead or a Wild</option>
+<option value="Starlight Princess">👑 Starlight Princess</option>
+<option value="Fruit Party">🍒 Fruit Party</option>
+</select>
+
+<label style="display:block;color:#ffad45;font-weight:bold;margin-top:20px">НОМИНАЛ</label>
+<select class="slot-select" id="slot-bet">
+<option value="40">40 ₽</option>
+<option value="60">60 ₽</option>
+<option value="80">80 ₽</option>
+<option value="100">100 ₽</option>
+<option value="200">200 ₽</option>
+<option value="300">300 ₽</option>
+<option value="500">500 ₽</option>
+<option value="700">700 ₽</option>
+<option value="1000">1000 ₽</option>
+</select>
+</div>
+
+<button onclick="generateSlotSignal()">⚡ СГЕНЕРИРОВАТЬ СИГНАЛ</button>
+
+<div id="slot-result"></div>
+
+<h3 style="color:#ff941c;margin-top:25px">📊 ИСТОРИЯ ГЕНЕРАЦИЙ</h3>
+<div id="slot-history"></div>
+
+<div class="demo-note">
+Сигналы генерируются случайным образом и не предсказывают результаты игровых автоматов. Они не гарантируют выигрыш и не являются рекомендациями по ставкам.
+</div>
+</div>`;
+
+renderSlotHistory();
+};
+
+window.generateSlotSignal=function(){
+const game=document.getElementById("slot-game").value;
+const bet=Number(document.getElementById("slot-bet").value);
+const result=document.getElementById("slot-result");
+
+const signal={
+game,
+bet,
+multiplier:(1+Math.random()*9).toFixed(2),
+attempts:Math.floor(Math.random()*5)+1,
+time:new Date().toLocaleTimeString("ru-RU")
+};
+
+result.innerHTML=`
+<div class="signal-box">
+<div class="premium-label">⚡ SLOTS AI SIGNAL</div>
+<h3 style="color:#fff">${escapeHtml(signal.game)}</h3>
+<div class="signal-label">НОМИНАЛ</div>
+<div style="font-size:23px;font-weight:bold;color:#fff">${signal.bet} ₽</div>
+<div class="signal-label" style="margin-top:15px">СЛУЧАЙНЫЙ ДЕМО-МНОЖИТЕЛЬ</div>
+<div class="signal-number">${signal.multiplier}x</div>
+<div class="signal-label">Условное число попыток: ${signal.attempts}</div>
+<div class="signal-label" style="margin-top:12px">Время: ${signal.time}</div>
+</div>`;
+
+window.slotHistory.unshift(signal);
+window.slotHistory=window.slotHistory.slice(0,15);
+localStorage.setItem("aibet_slot_history",JSON.stringify(window.slotHistory));
+renderSlotHistory();
+};
+
+function renderSlotHistory(){
+const history=document.getElementById("slot-history");
+if(!history)return;
+
+history.innerHTML=window.slotHistory.length?
+window.slotHistory.map(item=>`
+<div class="signal-history">
+<strong>${escapeHtml(item.game)}</strong><br>
+Номинал: ${item.bet} ₽ · ${escapeHtml(item.multiplier)}x<br>
+<small style="color:#888">${escapeHtml(item.time)}</small>
+</div>`).join("")
+:"<p style='color:#888'>Пока нет генераций</p>";
+}
+
+window.openProfile=function(){
+clearInterval(window.crashTimer);
+const user=tg?.initDataUnsafe?.user;
+const name=user?[user.first_name,user.last_name].filter(Boolean).join(" "):"Гость";
+const username=user?.username?"@"+user.username:"Не указан";
+
+document.getElementById("content").innerHTML=`
+<div style="text-align:center;padding:15px 0">
+<div class="profile-avatar">👤</div>
+<h2 style="color:#ff941c">${escapeHtml(name)}</h2>
+<p style="color:#999">${escapeHtml(username)}</p>
+<span class="premium-label">${window.isPremium?"💎 PREMIUM АКТИВЕН":"DEMO / БЕЗ PREMIUM"}</span>
+</div>
+
+<h3 style="color:#ff941c">📊 Моя статистика</h3>
+<div class="match">Раундов CRASH<h2 style="color:#ff941c">${window.crashHistory.length}</h2></div>
+
+<h3 style="color:#ff941c">🎰 SLOTS AI</h3>
+<div class="match">
+${window.slotsPremium?"💎 SLOTS AI PREMIUM АКТИВЕН":"🔒 SLOTS AI ЗАБЛОКИРОВАН"}
+</div>
+
+${!window.isPremium?'<button onclick="showSubscription()">💎 ОФОРМИТЬ AI BET PREMIUM</button>':''}
+
+${!window.slotsPremium?'<button onclick="openSlots()">🎰 ОТКРЫТЬ SLOTS AI</button>':'<button class="secondary-button" onclick="openSlots()">🎰 ПЕРЕЙТИ В SLOTS AI</button>'}
+
+<div class="match">
+<div>Приложение AI BET</div>
+<div class="info">Версия 2.0</div>
+</div>`;
+};
 
 updateMode();
-window.addEventListener("load", () => {
-  if (!window.isPremium) showSubscription();
+
+window.addEventListener("load",()=>{
+if(!window.isPremium)showSubscription();
 });
 </script>
 </body>
