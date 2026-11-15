@@ -481,13 +481,8 @@ function showPage(page) {
 function requestGame(game) {
   if (!isValidGame(game)) return;
 
-  // Если доступ уже есть — сразу открываем именно этот режим
-  if (hasAccess(game)) {
-    showPage(game);
-    return;
-  }
-
-  // Запоминаем, какой именно режим покупает пользователь
+  // Каждый раз показываем окно оплаты,
+  // даже если доступ к игре уже активирован.
   pendingGame = game;
 
   const title = document.getElementById("payment-title");
