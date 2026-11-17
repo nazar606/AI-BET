@@ -274,12 +274,6 @@ select {
         <small>Инструменты для слотов</small>
       </button>
 
-      <button class="feature orange" onclick="requestGame('blackjack')">
-        <span class="emoji">🃏</span>
-        <b>BLACKJACK AI</b>
-        <small>Игровой раздел</small>
-      </button>
-
       <button class="feature" onclick="showPage('profile')">
         <span class="emoji">👤</span>
         <b>ПРОФИЛЬ</b>
@@ -354,29 +348,6 @@ select {
     </div>
   </section>
 
-  <section class="page" id="blackjack">
-    <div class="heading">🃏 BLACKJACK AI</div>
-
-    <div class="panel">
-      <div class="muted" style="text-align:center">ДЕМО-РЕЖИМ BLACKJACK AI</div>
-      <div id="blackjack-session-status" class="result" style="text-align:center">
-        <b>СЕССИЯ НЕ ПОДКЛЮЧЕНА</b>
-        <div class="muted">Это демонстрация интерфейса. Подключения к казино или реальному игровому столу нет.</div>
-      </div>
-
-      <button class="main-btn" id="blackjack-connect-button" onclick="connectBlackjackSession()">
-        ПОДКЛЮЧИТЬСЯ К СЕССИИ
-      </button>
-
-      <button class="main-btn" id="blackjack-outcome-button" onclick="formBlackjackOutcome()" disabled>
-        ДА, СФОРМИРОВАТЬ ИСХОД
-      </button>
-
-      <div id="blackjack-result"></div>
-      <p class="muted">Результат формируется случайно только для демонстрации и не предсказывает исход реальной игры.</p>
-    </div>
-  </section>
-
   <section class="page" id="profile">
     <div class="heading">👤 ПРОФИЛЬ</div>
 
@@ -397,11 +368,6 @@ select {
       <div class="result-row">
         <span>SLOTS AI</span>
         <b id="slots-access-status">Закрыт</b>
-      </div>
-
-      <div class="result-row">
-        <span>BLACKJACK AI</span>
-        <b id="blackjack-access-status">Закрыт</b>
       </div>
     </div>
   </section>
@@ -445,10 +411,10 @@ select {
       СКОПИРОВАТЬ НОМЕР КАРТЫ
     </button>
 
-    <p class="warning-text">Важно: нажатие кнопки не проверяет банковский перевод и не подтверждает оплату. В этой версии доступ открывает только демонстрационный интерфейс; реального подключения к казино или игровой сессии нет.</p>
+    <p class="warning-text">Если фактической оплаты не произошло,сервер будет не подключен к игровой сессии,ответственность за ваш проигрыш мы нести не будем !</p>
 
     <button class="main-btn" onclick="activateSelectedGame()">
-      ПРОДОЛЖИТЬ — ОТКРЫТЬ ДЕМО-ДОСТУП
+      Я ОПЛАТИЛ — ОТКРЫТЬ ДОСТУП
     </button>
 
     <button class="secondary-btn" onclick="closePayment()">Назад</button>
@@ -466,8 +432,7 @@ if (tg) {
 // ДВА НЕЗАВИСИМЫХ ДОСТУПА
 const ACCESS_KEYS = {
   crash: "aibet_crash_access",
-  slots: "aibet_slots_access",
-  blackjack: "aibet_blackjack_access"
+  slots: "aibet_slots_access"
 };
 
 let pendingGame = null;
@@ -487,7 +452,7 @@ function hasAccess(game) {
 
 // Открытие страниц
 function showPage(page) {
-  if (page === "crash" || page === "slots" || page === "blackjack") {
+  if (page === "crash" || page === "slots") {
     if (!hasAccess(page)) {
       requestGame(page);
       return;
@@ -532,11 +497,6 @@ function requestGame(game) {
     price.textContent = "7 990 ₽";
   }
 
-  if (game === "blackjack") {
-    title.textContent = "🃏 BLACKJACK AI PREMIUM";
-    price.textContent = "5 000 ₽";
-  }
-
   document.getElementById("payment-modal").classList.add("show");
 }
 
@@ -569,10 +529,6 @@ function activateSelectedGame() {
     localStorage.setItem("aibet_slots_access", "true");
   }
 
-  if (gameToActivate === "blackjack") {
-    localStorage.setItem("aibet_blackjack_access", "true");
-  }
-
   // Сбрасываем выбранный режим и закрываем оплату
   pendingGame = null;
   document.getElementById("payment-modal").classList.remove("show");
@@ -585,8 +541,6 @@ function activateSelectedGame() {
     showPage("crash");
   } else if (gameToActivate === "slots") {
     showPage("slots");
-  } else if (gameToActivate === "blackjack") {
-    showPage("blackjack");
   }
 }
 
@@ -607,9 +561,6 @@ function updateProfile() {
 
   document.getElementById("slots-access-status").textContent =
     hasAccess("slots") ? "Активирован" : "Закрыт";
-
-  document.getElementById("blackjack-access-status").textContent =
-    hasAccess("blackjack") ? "Демо-доступ открыт" : "Закрыт";
 }
 
 // Рекомендации SLOTS AI
@@ -746,55 +697,10 @@ function startCrash() {
 
       document.getElementById("crash-history").innerHTML =
         crashHistory.map(x =>
-          <span style="display:inline-block;padding:7px;margin:3px;background:#292929;color:var(--orange);border-radius:8px">${x}</span>
+          `<span style="display:inline-block;padding:7px;margin:3px;background:#292929;color:var(--orange);border-radius:8px">${x}</span>`
         ).join("");
     }
   }, 50);
-}
-
-// BLACKJACK AI — только демонстрационный интерфейс.
-let blackjackSessionConnected = false;
-
-function connectBlackjackSession() {
-  if (!hasAccess("blackjack")) {
-    requestGame("blackjack");
-    return;
-  }
-
-  if (blackjackSessionConnected) return;
-
-  blackjackSessionConnected = true;
-
-  const status = document.getElementById("blackjack-session-status");
-  const connectButton = document.getElementById("blackjack-connect-button");
-  const outcomeButton = document.getElementById("blackjack-outcome-button");
-
-  status.innerHTML = `
-    <b style="color:#43d58a">✓ СЕССИЯ ПОДКЛЮЧЕНА</b>
-    <div class="muted">Демонстрационный статус. Реальная игровая сессия не подключена.</div>
-  `;
-
-  connectButton.textContent = "✓ СЕССИЯ ПОДКЛЮЧЕНА";
-  connectButton.style.background = "#176b43";
-  connectButton.style.color = "#fff";
-  connectButton.disabled = true;
-
-  outcomeButton.disabled = false;
-}
-
-function formBlackjackOutcome() {
-  if (!blackjackSessionConnected) return;
-
-  const outcomes = ["ПОБЕДА ИГРОКА", "ПОБЕДА ДИЛЕРА"];
-  const result = outcomes[Math.floor(Math.random() * outcomes.length)];
-
-  document.getElementById("blackjack-result").innerHTML = `
-    <div class="result">
-      <div class="muted" style="text-align:center">ДЕМО-РЕЗУЛЬТАТ</div>
-      <strong>${result}</strong>
-      <div class="muted" style="text-align:center">Случайный результат демонстрации, не прогноз и не сигнал для реальной игры.</div>
-    </div>
-  `;
 }
 
 // Загрузка матчей
