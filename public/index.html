@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,752 +5,246 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI BET</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
-:root {
-  --orange:#ff8a00;
-  --gold:#ffad32;
-  --bg:#080808;
-  --panel:#151515;
-}
-* { box-sizing:border-box; }
-
-body {
-  margin:0;
-  padding:0 0 90px;
-  background:radial-gradient(circle at top,#30200f,#111 38%,#080808 78%);
-  color:#fff;
-  font-family:Arial,sans-serif;
-}
-
-button,select { font:inherit; cursor:pointer; }
-
-header {
-  padding:19px 17px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo { font-size:25px; font-weight:900; letter-spacing:1px; }
-.logo span { color:var(--orange); }
-.online { font-size:11px; color:#43d58a; font-weight:bold; }
-
-.container { max-width:650px; margin:auto; padding:0 15px; }
-.page { display:none; }
-.page.active { display:block; }
-
-.welcome {
-  padding:21px;
-  border:1px solid #553415;
-  border-radius:18px;
-  background:linear-gradient(135deg,#321d08,#15110c);
-  margin-bottom:20px;
-}
-
-.welcome small { color:var(--gold); letter-spacing:2px; }
-.welcome h1 { font-size:25px; margin:10px 0 6px; }
-.welcome p { font-size:13px; color:#aaa; margin:0; }
-
-.heading { font-size:17px; font-weight:900; margin:22px 0 12px; }
-
-.cards { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
-
-.feature {
-  min-height:125px;
-  text-align:left;
-  padding:17px;
-  border-radius:17px;
-  border:1px solid #333;
-  background:linear-gradient(145deg,#202020,#101010);
-  color:white;
-}
-
-.feature:active { transform:scale(.98); }
-
-.feature.orange {
-  border-color:#75420f;
-  background:linear-gradient(145deg,#422607,#17100a);
-}
-
-.feature .emoji { display:block; font-size:29px; margin-bottom:13px; }
-.feature b { display:block; font-size:15px; }
-.feature small { display:block; color:#999; font-size:11px; margin-top:5px; }
-
-.panel {
-  padding:17px;
-  background:var(--panel);
-  border:1px solid #303030;
-  border-radius:16px;
-  margin-bottom:13px;
-}
-
-.main-btn {
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:12px;
-  background:linear-gradient(90deg,var(--orange),var(--gold));
-  color:#1a1005;
-  font-weight:900;
-  margin-top:12px;
-}
-
-.secondary-btn {
-  width:100%;
-  padding:13px;
-  border:1px solid #444;
-  border-radius:12px;
-  background:#202020;
-  color:white;
-  font-weight:bold;
-  margin-top:9px;
-}
-
-.muted { font-size:12px; line-height:1.5; color:#929292; }
-
-label {
-  display:block;
-  color:#aaa;
-  font-size:12px;
-  margin-top:14px;
-}
-
-select {
-  width:100%;
-  padding:13px;
-  border:1px solid #383838;
-  border-radius:11px;
-  background:#0c0c0c;
-  color:#fff;
-  margin-top:7px;
-}
-
-.result {
-  margin-top:14px;
-  padding:16px;
-  border-radius:14px;
-  background:#241707;
-  border:1px solid #70400e;
-}
-
-.result strong {
-  display:block;
-  text-align:center;
-  color:var(--gold);
-  font-size:27px;
-  margin:8px;
-}
-
-.result-row {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 0;
-  border-bottom:1px solid #383027;
-  font-size:13px;
-}
-
-.result-row:last-child { border:0; }
-
-.nav {
-  position:fixed;
-  bottom:0;
-  left:10px;
-  right:10px;
-  z-index:15;
-  display:flex;
-  justify-content:space-around;
-  padding:10px 3px calc(10px + env(safe-area-inset-bottom));
-  border:1px solid #333;
-  border-radius:15px 15px 0 0;
-  background:rgba(20,20,20,.98);
-}
-
-.nav button {
-  border:0;
-  background:none;
-  color:#888;
-  font-size:10px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-}
-
-.nav button span { font-size:19px; }
-.nav button.active { color:var(--orange); }
-
-.modal-bg {
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:50;
-  background:rgba(0,0,0,.85);
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-}
-
-.modal-bg.show { display:flex; }
-
-.modal {
-  width:100%;
-  max-width:420px;
-  background:#181818;
-  border:1px solid #70400e;
-  border-radius:20px;
-  padding:22px;
-}
-
-.close {
-  float:right;
-  background:none;
-  border:0;
-  color:#aaa;
-  font-size:24px;
-}
-
-.modal h2 { font-size:21px; margin:3px 0 12px; }
-.price { font-size:32px; font-weight:900; color:var(--orange); margin:15px 0; }
-
-.card-number {
-  background:#090909;
-  border:1px solid #444;
-  border-radius:11px;
-  padding:15px;
-  text-align:center;
-  font-size:19px;
-  letter-spacing:1px;
-  margin:13px 0;
-}
-
-.profile-name { font-size:19px; font-weight:bold; margin-top:10px; }
-.history-empty { text-align:center; color:#888; padding:15px; }
-
-.warning-text {
-  color:#d7b58d;
-  font-size:12px;
-  line-height:1.55;
-  margin:14px 0;
-}
+:root{--orange:#ff8a00;--gold:#ffad32;--bg:#080808;--panel:#151515}
+*{box-sizing:border-box}
+body{margin:0;padding:0 0 90px;background:radial-gradient(circle at top,#30200f,#111 38%,#080808 78%);color:#fff;font-family:Arial,sans-serif}
+button,select{font:inherit;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+header{padding:19px 17px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:25px;font-weight:900;letter-spacing:1px}.logo span{color:var(--orange)}
+.online{font-size:11px;color:#43d58a;font-weight:bold}
+.container{max-width:650px;margin:auto;padding:0 15px}
+.page{display:none}.page.active{display:block}
+.welcome{padding:21px;border:1px solid #553415;border-radius:18px;background:linear-gradient(135deg,#321d08,#15110c);margin-bottom:20px}
+.welcome small{color:var(--gold);letter-spacing:2px}.welcome h1{font-size:25px;margin:10px 0 6px}.welcome p{font-size:13px;color:#aaa;margin:0}
+.heading{font-size:17px;font-weight:900;margin:22px 0 12px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.feature{min-height:125px;text-align:left;padding:17px;border-radius:17px;border:1px solid #333;background:linear-gradient(145deg,#202020,#101010);color:white}
+.feature:active{transform:scale(.98)}.feature.orange{border-color:#75420f;background:linear-gradient(145deg,#422607,#17100a)}
+.feature .emoji{display:block;font-size:29px;margin-bottom:13px}.feature b{display:block;font-size:15px}.feature small{display:block;color:#999;font-size:11px;margin-top:5px}
+.panel{padding:17px;background:var(--panel);border:1px solid #303030;border-radius:16px;margin-bottom:13px}
+.main-btn{width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(90deg,var(--orange),var(--gold));color:#1a1005;font-weight:900;margin-top:12px}
+.secondary-btn{width:100%;padding:13px;border:1px solid #444;border-radius:12px;background:#202020;color:white;font-weight:bold;margin-top:9px}
+.muted{font-size:12px;line-height:1.5;color:#929292}
+label{display:block;color:#aaa;font-size:12px;margin-top:14px}
+select{width:100%;padding:13px;border:1px solid #383838;border-radius:11px;background:#0c0c0c;color:#fff;margin-top:7px}
+.result{margin-top:14px;padding:16px;border-radius:14px;background:#241707;border:1px solid #70400e}
+.result strong{display:block;text-align:center;color:var(--gold);font-size:27px;margin:8px}
+.result-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #383027;font-size:13px}
+.result-row:last-child{border:0}
+.nav{position:fixed;bottom:0;left:10px;right:10px;z-index:15;display:flex;justify-content:space-around;padding:10px 3px calc(10px + env(safe-area-inset-bottom));border:1px solid #333;border-radius:15px 15px 0 0;background:rgba(20,20,20,.98)}
+.nav button{border:0;background:none;color:#888;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav button span{font-size:19px}.nav button.active{color:var(--orange)}
+.modal-bg{display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:18px}
+.modal-bg.show{display:flex}.modal{width:100%;max-width:420px;background:#181818;border:1px solid #70400e;border-radius:20px;padding:22px}
+.close{float:right;background:none;border:0;color:#aaa;font-size:24px}
+.modal h2{font-size:21px;margin:3px 0 12px}.price{font-size:32px;font-weight:900;color:var(--orange);margin:15px 0}
+.card-number{background:#090909;border:1px solid #444;border-radius:11px;padding:15px;text-align:center;font-size:19px;letter-spacing:1px;margin:13px 0}
+.profile-name{font-size:19px;font-weight:bold;margin-top:10px}.history-empty{text-align:center;color:#888;padding:15px}
+.warning-text{color:#d7b58d;font-size:12px;line-height:1.55;margin:14px 0}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="logo">⚡ AI <span>BET</span></div>
-  <div class="online">● ONLINE</div>
-</header>
-
+<header><div class="logo">⚡ AI <span>BET</span></div><div class="online">● ONLINE</div></header>
 <div class="container">
+<section class="page active" id="home">
+  <div class="welcome"><small>СПОРТИВНАЯ ПЛАТФОРМА</small><h1>Добро пожаловать в AI BET</h1><p>Матчи, игровые инструменты и аналитика в одном приложении</p></div>
+  <div class="heading">Основные разделы</div>
+  <div class="cards">
+    <button class="feature" onclick="showPage('matches')"><span class="emoji">⚽</span><b>МАТЧИ</b><small>Спортивные события</small></button>
+    <button class="feature orange" onclick="requestGame('crash')"><span class="emoji">🚀</span><b>CRASH</b><small>Игровой раздел</small></button>
+    <button class="feature orange" onclick="requestGame('slots')"><span class="emoji">🎰</span><b>SLOTS AI</b><small>Инструменты для слотов</small></button>
+    <button class="feature orange" onclick="requestGame('blackjack')"><span class="emoji">🃏</span><b>BLACKJACK AI</b><small>Игровой раздел</small></button>
+    <button class="feature" onclick="showPage('profile')"><span class="emoji">👤</span><b>ПРОФИЛЬ</b><small>Ваш аккаунт</small></button>
+  </div>
+</section>
 
-  <section class="page active" id="home">
-    <div class="welcome">
-      <small>СПОРТИВНАЯ ПЛАТФОРМА</small>
-      <h1>Добро пожаловать в AI BET</h1>
-      <p>Матчи, игровые инструменты и аналитика в одном приложении</p>
-    </div>
+<section class="page" id="matches">
+  <div class="heading">⚽ СПОРТИВНЫЕ МАТЧИ</div>
+  <div class="panel"><div id="matches-list" class="muted">Загрузка матчей...</div><button class="secondary-btn" onclick="loadMatches()">Обновить</button></div>
+</section>
 
-    <div class="heading">Основные разделы</div>
+<section class="page" id="crash">
+  <div class="heading">🚀 CRASH</div>
+  <div class="panel">
+    <div style="text-align:center;padding:15px"><div style="font-size:45px">🚀</div><div class="muted">Текущий коэффициент</div><div id="crash-value" style="font-size:43px;color:var(--orange);font-weight:900;margin:12px">1.00x</div><div id="crash-status" class="muted">Нажмите, чтобы начать раунд</div></div>
+    <button class="main-btn" id="crash-button" onclick="startCrash()">ЗАПУСТИТЬ</button>
+  </div>
+  <div class="panel"><b>История раундов</b><div id="crash-history" class="muted" style="margin-top:12px">Пока нет раундов</div></div>
+</section>
 
-    <div class="cards">
-      <button class="feature" onclick="showPage('matches')">
-        <span class="emoji">⚽</span>
-        <b>МАТЧИ</b>
-        <small>Спортивные события</small>
-      </button>
+<section class="page" id="slots">
+  <div class="heading">🎰 SLOTS AI</div>
+  <div class="panel">
+    <label>Выбранный слот</label>
+    <select id="slot-game"><option>Sweet Bonanza</option><option>Gates of Olympus</option><option>Starlight Princess</option><option>Sugar Rush</option><option>The Dog House</option><option>Big Bass Bonanza</option><option>Fruit Party</option><option>Wanted Dead or a Wild</option></select>
+    <label>Номинал ставки</label>
+    <select id="slot-bet"><option value="40">40 ₽</option><option value="60">60 ₽</option><option value="80">80 ₽</option><option value="100">100 ₽</option><option value="200">200 ₽</option><option value="300">300 ₽</option><option value="500">500 ₽</option><option value="1000">1 000 ₽</option></select>
+    <button class="main-btn" onclick="generateSlotSignal()">СФОРМИРОВАТЬ РЕКОМЕНДАЦИЮ</button><div id="slot-result"></div>
+  </div>
+  <div class="panel"><b>📜 История рекомендаций</b><div id="slot-history" class="history-empty">История пока пуста</div></div>
+</section>
 
-      <button class="feature orange" onclick="requestGame('crash')">
-        <span class="emoji">🚀</span>
-        <b>CRASH</b>
-        <small>Игровой раздел</small>
-      </button>
+<section class="page" id="blackjack">
+  <div class="heading">🃏 BLACKJACK AI</div>
+  <div class="panel">
+    <div id="blackjack-session-status" class="result" style="text-align:center"><b>СЕССИЯ НЕ АКТИВНА</b><div class="muted">Игровая сессия не подключена.</div></div>
+    <button class="main-btn" id="blackjack-connect-button" onclick="connectBlackjackSession()">ПОДКЛЮЧИТЬСЯ К СЕССИИ</button>
+    <button class="main-btn" id="blackjack-outcome-button" onclick="formBlackjackOutcome()" disabled>СФОРМИРОВАТЬ ИСХОД</button>
+    <div id="blackjack-result"></div>
+    <p class="muted">Результат формируется случайным образом и не является прогнозом реальной игры.</p>
+  </div>
+</section>
 
-      <button class="feature orange" onclick="requestGame('slots')">
-        <span class="emoji">🎰</span>
-        <b>SLOTS AI</b>
-        <small>Инструменты для слотов</small>
-      </button>
-
-      <button class="feature" onclick="showPage('profile')">
-        <span class="emoji">👤</span>
-        <b>ПРОФИЛЬ</b>
-        <small>Ваш аккаунт</small>
-      </button>
-    </div>
-  </section>
-
-  <section class="page" id="matches">
-    <div class="heading">⚽ СПОРТИВНЫЕ МАТЧИ</div>
-    <div class="panel">
-      <div id="matches-list" class="muted">Загрузка матчей...</div>
-      <button class="secondary-btn" onclick="loadMatches()">Обновить</button>
-    </div>
-  </section>
-
-  <section class="page" id="crash">
-    <div class="heading">🚀 CRASH</div>
-
-    <div class="panel">
-      <div style="text-align:center;padding:15px">
-        <div style="font-size:45px">🚀</div>
-        <div class="muted">Текущий коэффициент</div>
-        <div id="crash-value" style="font-size:43px;color:var(--orange);font-weight:900;margin:12px">1.00x</div>
-        <div id="crash-status" class="muted">Нажмите, чтобы начать раунд</div>
-      </div>
-
-      <button class="main-btn" id="crash-button" onclick="startCrash()">ЗАПУСТИТЬ</button>
-    </div>
-
-    <div class="panel">
-      <b>История раундов</b>
-      <div id="crash-history" class="muted" style="margin-top:12px">Пока нет раундов</div>
-    </div>
-  </section>
-
-  <section class="page" id="slots">
-    <div class="heading">🎰 SLOTS AI</div>
-
-    <div class="panel">
-      <label>Выбранный слот</label>
-      <select id="slot-game">
-        <option>Sweet Bonanza</option>
-        <option>Gates of Olympus</option>
-        <option>Starlight Princess</option>
-        <option>Sugar Rush</option>
-        <option>The Dog House</option>
-        <option>Big Bass Bonanza</option>
-        <option>Fruit Party</option>
-        <option>Wanted Dead or a Wild</option>
-      </select>
-
-      <label>Номинал ставки</label>
-      <select id="slot-bet">
-        <option value="40">40 ₽</option>
-        <option value="60">60 ₽</option>
-        <option value="80">80 ₽</option>
-        <option value="100">100 ₽</option>
-        <option value="200">200 ₽</option>
-        <option value="300">300 ₽</option>
-        <option value="500">500 ₽</option>
-        <option value="1000">1 000 ₽</option>
-      </select>
-
-      <button class="main-btn" onclick="generateSlotSignal()">СФОРМИРОВАТЬ РЕКОМЕНДАЦИЮ</button>
-      <div id="slot-result"></div>
-    </div>
-
-    <div class="panel">
-      <b>📜 История рекомендаций</b>
-      <div id="slot-history" class="history-empty">История пока пуста</div>
-    </div>
-  </section>
-
-  <section class="page" id="profile">
-    <div class="heading">👤 ПРОФИЛЬ</div>
-
-    <div class="panel">
-      <div style="font-size:35px">👤</div>
-      <div class="profile-name" id="profile-name">Пользователь</div>
-      <div class="muted" id="profile-username"></div>
-    </div>
-
-    <div class="panel">
-      <b>Ваш доступ</b>
-
-      <div class="result-row">
-        <span>CRASH</span>
-        <b id="crash-access-status">Закрыт</b>
-      </div>
-
-      <div class="result-row">
-        <span>SLOTS AI</span>
-        <b id="slots-access-status">Закрыт</b>
-      </div>
-    </div>
-  </section>
-
+<section class="page" id="profile">
+  <div class="heading">👤 ПРОФИЛЬ</div>
+  <div class="panel"><div style="font-size:35px">👤</div><div class="profile-name" id="profile-name">Пользователь</div><div class="muted" id="profile-username"></div></div>
+  <div class="panel">
+    <b>Ваш доступ</b>
+    <div class="result-row"><span>CRASH</span><b id="crash-access-status">Закрыт</b></div>
+    <div class="result-row"><span>SLOTS AI</span><b id="slots-access-status">Закрыт</b></div>
+    <div class="result-row"><span>BLACKJACK AI</span><b id="blackjack-access-status">Закрыт</b></div>
+  </div>
+</section>
 </div>
 
 <nav class="nav">
-  <button class="active" data-page="home" onclick="showPage('home')">
-    <span>🏠</span>Главная
-  </button>
-
-  <button data-page="matches" onclick="showPage('matches')">
-    <span>⚽</span>Матчи
-  </button>
-
-  <button data-page="crash" onclick="requestGame('crash')">
-    <span>🚀</span>CRASH
-  </button>
-
-  <button data-page="slots" onclick="requestGame('slots')">
-    <span>🎰</span>Слоты
-  </button>
-
-  <button data-page="profile" onclick="showPage('profile')">
-    <span>👤</span>Профиль
-  </button>
+  <button class="active" data-page="home" onclick="showPage('home')"><span>🏠</span>Главная</button>
+  <button data-page="matches" onclick="showPage('matches')"><span>⚽</span>Матчи</button>
+  <button data-page="crash" onclick="requestGame('crash')"><span>🚀</span>CRASH</button>
+  <button data-page="slots" onclick="requestGame('slots')"><span>🎰</span>Слоты</button>
+  <button data-page="profile" onclick="showPage('profile')"><span>👤</span>Профиль</button>
 </nav>
 
 <div class="modal-bg" id="payment-modal">
   <div class="modal">
     <button class="close" onclick="closePayment()">×</button>
-
-    <h2 id="payment-title">💎 PREMIUM</h2>
-    <div class="price" id="payment-price">4 990 ₽</div>
-
+    <h2 id="payment-title">💎 PREMIUM</h2><div class="price" id="payment-price">4 990 ₽</div>
     <p class="muted">Реквизиты для перевода:</p>
-
     <div class="card-number">5599 0020 9077 3930</div>
-
-    <button class="secondary-btn" onclick="copyCard()">
-      СКОПИРОВАТЬ НОМЕР КАРТЫ
-    </button>
-
-    <p class="warning-text">Если фактической оплаты не произошло,сервер будет не подключен к игровой сессии,ответственность за ваш проигрыш мы нести не будем !</p>
-
-    <button class="main-btn" onclick="activateSelectedGame()">
-      Я ОПЛАТИЛ — ОТКРЫТЬ ДОСТУП
-    </button>
-
+    <button class="secondary-btn" onclick="copyCard()">СКОПИРОВАТЬ НОМЕР КАРТЫ</button>
+    <p class="warning-text">Перевод не проверяется автоматически. Доступ открывается после подтверждения оплаты администратором. Открытие раздела не означает подключение к реальному игровому столу.</p>
+    <button class="main-btn" onclick="submitPaymentNotice()">Я ОПЛАТИЛ — ОТПРАВИТЬ ЗАЯВКУ</button>
     <button class="secondary-btn" onclick="closePayment()">Назад</button>
   </div>
 </div>
 
 <script>
-const tg = window.Telegram?.WebApp;
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand()}
 
-if (tg) {
-  tg.ready();
-  tg.expand();
+const ACCESS_KEYS={crash:"aibet_crash_access",slots:"aibet_slots_access",blackjack:"aibet_blackjack_access"};
+const PRICES={crash:"4 990 ₽",slots:"7 990 ₽",blackjack:"5 000 ₽"};
+const TITLES={crash:"🚀 AI BET PREMIUM",slots:"🎰 SLOTS AI PREMIUM",blackjack:"🃏 BLACKJACK AI PREMIUM"};
+let pendingGame=null,crashTimer=null,crashRunning=false,crashHistory=[],blackjackSessionConnected=false;
+
+function isValidGame(game){return Object.prototype.hasOwnProperty.call(ACCESS_KEYS,game)}
+function hasAccess(game){return isValidGame(game)&&localStorage.getItem(ACCESS_KEYS[game])==="true"}
+
+function showPage(page){
+  if(["crash","slots","blackjack"].includes(page)&&!hasAccess(page)){requestGame(page);return}
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  const target=document.getElementById(page);if(!target)return;target.classList.add("active");
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
+  if(page==="profile")updateProfile();
+  if(page==="slots")renderSlotHistory();
 }
 
-// ДВА НЕЗАВИСИМЫХ ДОСТУПА
-const ACCESS_KEYS = {
-  crash: "aibet_crash_access",
-  slots: "aibet_slots_access"
-};
-
-let pendingGame = null;
-let crashTimer = null;
-let crashRunning = false;
-let crashHistory = [];
-
-function isValidGame(game) {
-  return Object.prototype.hasOwnProperty.call(ACCESS_KEYS, game);
-}
-
-// Проверяем доступ только к конкретному режиму
-function hasAccess(game) {
-  if (!isValidGame(game)) return false;
-  return localStorage.getItem(ACCESS_KEYS[game]) === "true";
-}
-
-// Открытие страниц
-function showPage(page) {
-  if (page === "crash" || page === "slots") {
-    if (!hasAccess(page)) {
-      requestGame(page);
-      return;
-    }
-  }
-
-  document.querySelectorAll(".page").forEach(x => {
-    x.classList.remove("active");
-  });
-
-  const target = document.getElementById(page);
-  if (!target) return;
-
-  target.classList.add("active");
-
-  document.querySelectorAll(".nav button").forEach(x => {
-    x.classList.toggle("active", x.dataset.page === page);
-  });
-
-  if (page === "profile") updateProfile();
-  if (page === "slots") renderSlotHistory();
-}
-
-// Покупка конкретного режима
-function requestGame(game) {
-  if (!isValidGame(game)) return;
-
-  // Каждый раз показываем окно оплаты,
-  // даже если доступ к игре уже активирован.
-  pendingGame = game;
-
-  const title = document.getElementById("payment-title");
-  const price = document.getElementById("payment-price");
-
-  if (game === "crash") {
-    title.textContent = "🚀 AI BET PREMIUM";
-    price.textContent = "4 990 ₽";
-  }
-
-  if (game === "slots") {
-    title.textContent = "🎰 SLOTS AI PREMIUM";
-    price.textContent = "7 990 ₽";
-  }
-
+function requestGame(game){
+  if(!isValidGame(game))return;
+  pendingGame=game;
+  document.getElementById("payment-title").textContent=TITLES[game];
+  document.getElementById("payment-price").textContent=PRICES[game];
   document.getElementById("payment-modal").classList.add("show");
 }
-
-// Закрытие окна оплаты
-function closePayment() {
-  document.getElementById("payment-modal").classList.remove("show");
-  pendingGame = null;
+function closePayment(){document.getElementById("payment-modal").classList.remove("show");pendingGame=null}
+async function copyCard(){
+  try{await navigator.clipboard.writeText("5599002090773930");alert("Номер карты скопирован")}
+  catch(e){alert("Номер карты: 5599 0020 9077 3930")}
 }
 
-// Копирование карты
-function copyCard() {
-  navigator.clipboard.writeText("5599002090773930")
-    .then(() => alert("Номер карты скопирован"))
-    .catch(() => alert("Номер карты: 5599 0020 9077 3930"));
+// Заявка на проверку оплаты. Доступ не открывается до подтверждения администратором.
+function submitPaymentNotice(){
+  if(!pendingGame)return;
+  const game=pendingGame;
+  const user=tg?.initDataUnsafe?.user;
+  const message=`Заявка на проверку оплаты: ${game}; Telegram ID: ${user?.id??"не указан"}; пользователь: ${user?.username?"@"+user.username:"не указан"}`;
+  closePayment();
+  alert("Заявка подготовлена. Для подтверждения оплаты свяжитесь с администратором AI BET.");
+  console.info(message);
 }
 
-// ГЛАВНАЯ ФУНКЦИЯ АКТИВАЦИИ
-function activateSelectedGame() {
-  const gameToActivate = pendingGame;
-
-  // Если выбранный режим не определён — ничего не активируем
-  if (!isValidGame(gameToActivate)) return;
-
-  // Записываем доступ ТОЛЬКО для выбранной игры
-  if (gameToActivate === "crash") {
-    localStorage.setItem("aibet_crash_access", "true");
-  }
-
-  if (gameToActivate === "slots") {
-    localStorage.setItem("aibet_slots_access", "true");
-  }
-
-  // Сбрасываем выбранный режим и закрываем оплату
-  pendingGame = null;
-  document.getElementById("payment-modal").classList.remove("show");
-
-  // Обновляем профиль
-  updateProfile();
-
-  // Открываем только купленный режим
-  if (gameToActivate === "crash") {
-    showPage("crash");
-  } else if (gameToActivate === "slots") {
-    showPage("slots");
-  }
+function updateProfile(){
+  const user=tg?.initDataUnsafe?.user;
+  document.getElementById("profile-name").textContent=user?[user.first_name,user.last_name].filter(Boolean).join(" "):"Пользователь";
+  document.getElementById("profile-username").textContent=user?.username?"@"+user.username:"";
+  document.getElementById("crash-access-status").textContent=hasAccess("crash")?"Активирован":"Закрыт";
+  document.getElementById("slots-access-status").textContent=hasAccess("slots")?"Активирован":"Закрыт";
+  document.getElementById("blackjack-access-status").textContent=hasAccess("blackjack")?"Активирован":"Закрыт";
 }
 
-// Профиль
-function updateProfile() {
-  const user = tg?.initDataUnsafe?.user;
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
-  document.getElementById("profile-name").textContent =
-    user
-      ? [user.first_name, user.last_name].filter(Boolean).join(" ")
-      : "Пользователь";
-
-  document.getElementById("profile-username").textContent =
-    user?.username ? "@" + user.username : "";
-
-  document.getElementById("crash-access-status").textContent =
-    hasAccess("crash") ? "Активирован" : "Закрыт";
-
-  document.getElementById("slots-access-status").textContent =
-    hasAccess("slots") ? "Активирован" : "Закрыт";
+function generateSlotSignal(){
+  if(!hasAccess("slots")){requestGame("slots");return}
+  const game=document.getElementById("slot-game").value,bet=Number(document.getElementById("slot-bet").value);
+  const spins=Math.floor(Math.random()*25)+10,total=spins*bet;
+  document.getElementById("slot-result").innerHTML=`<div class="result"><div class="muted" style="text-align:center">РЕКОМЕНДАЦИЯ</div><strong>${spins} прокрутов</strong><div class="result-row"><span>Слот</span><b>${escapeHTML(game)}</b></div><div class="result-row"><span>Номинал</span><b>${bet} ₽</b></div><div class="result-row"><span>Количество прокрутов</span><b>${spins}</b></div><div class="result-row"><span>Общая сумма</span><b>${total.toLocaleString("ru-RU")} ₽</b></div></div>`;
+  const history=JSON.parse(localStorage.getItem("aibet_slot_history")||"[]");
+  history.unshift({game,bet,spins,total,date:new Date().toLocaleString("ru-RU")});
+  localStorage.setItem("aibet_slot_history",JSON.stringify(history.slice(0,20)));renderSlotHistory();
+}
+function renderSlotHistory(){
+  const history=JSON.parse(localStorage.getItem("aibet_slot_history")||"[]"),el=document.getElementById("slot-history");
+  if(!history.length){el.innerHTML='<div class="history-empty">История пока пуста</div>';return}
+  el.innerHTML=history.map(x=>`<div class="result-row"><div><b>${escapeHTML(x.game)}</b><div class="muted">${escapeHTML(x.date)}</div></div><div style="text-align:right"><b>${x.spins} прокрутов</b><div class="muted">${Number(x.total).toLocaleString("ru-RU")} ₽</div></div></div>`).join("");
 }
 
-// Рекомендации SLOTS AI
-function generateSlotSignal() {
-  if (!hasAccess("slots")) {
-    requestGame("slots");
-    return;
-  }
-
-  const game = document.getElementById("slot-game").value;
-  const bet = Number(document.getElementById("slot-bet").value);
-
-  const spins = Math.floor(Math.random() * 25) + 10;
-  const total = spins * bet;
-
-  document.getElementById("slot-result").innerHTML = `
-    <div class="result">
-      <div class="muted" style="text-align:center">РЕКОМЕНДАЦИЯ</div>
-      <strong>${spins} прокрутов</strong>
-      <div class="result-row">
-        <span>Слот</span>
-        <b>${escapeHTML(game)}</b>
-      </div>
-      <div class="result-row">
-        <span>Номинал</span>
-        <b>${bet} ₽</b>
-      </div>
-      <div class="result-row">
-        <span>Количество прокрутов</span>
-        <b>${spins}</b>
-      </div>
-      <div class="result-row">
-        <span>Общая сумма</span>
-        <b>${total.toLocaleString("ru-RU")} ₽</b>
-      </div>
-    </div>
-  `;
-
-  const history = JSON.parse(
-    localStorage.getItem("aibet_slot_history") || "[]"
-  );
-
-  history.unshift({
-    game,
-    bet,
-    spins,
-    total,
-    date: new Date().toLocaleString("ru-RU")
-  });
-
-  localStorage.setItem(
-    "aibet_slot_history",
-    JSON.stringify(history.slice(0, 20))
-  );
-
-  renderSlotHistory();
-}
-
-// История слотов
-function renderSlotHistory() {
-  const history = JSON.parse(
-    localStorage.getItem("aibet_slot_history") || "[]"
-  );
-
-  const el = document.getElementById("slot-history");
-
-  if (!history.length) {
-    el.innerHTML = '<div class="history-empty">История пока пуста</div>';
-    return;
-  }
-
-  el.innerHTML = history.map(x => `
-    <div class="result-row">
-      <div>
-        <b>${escapeHTML(x.game)}</b>
-        <div class="muted">${escapeHTML(x.date)}</div>
-      </div>
-      <div style="text-align:right">
-        <b>${x.spins} прокрутов</b>
-        <div class="muted">${Number(x.total).toLocaleString("ru-RU")} ₽</div>
-      </div>
-    </div>
-  `).join("");
-}
-
-// Защита вывода текста
-function escapeHTML(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[c]));
-}
-
-// CRASH
-function startCrash() {
-  if (!hasAccess("crash")) {
-    requestGame("crash");
-    return;
-  }
-
-  if (crashRunning) return;
-
-  crashRunning = true;
-
-  let current = 1;
-  const target = 1 + Math.random() * 8;
-
-  const value = document.getElementById("crash-value");
-  const status = document.getElementById("crash-status");
-  const button = document.getElementById("crash-button");
-
-  button.disabled = true;
-  button.textContent = "РАУНД ИДЁТ";
-  status.textContent = "Идёт игровой раунд...";
-
-  crashTimer = setInterval(() => {
-    current += 0.025 + current * 0.009;
-    value.textContent = current.toFixed(2) + "x";
-
-    if (current >= target) {
-      clearInterval(crashTimer);
-      crashRunning = false;
-
-      button.disabled = false;
-      button.textContent = "ЗАПУСТИТЬ СНОВА";
-      value.textContent = target.toFixed(2) + "x";
-      status.textContent = "Раунд завершён";
-
-      crashHistory.unshift(target.toFixed(2) + "x");
-      crashHistory = crashHistory.slice(0, 8);
-
-      document.getElementById("crash-history").innerHTML =
-        crashHistory.map(x =>
-          `<span style="display:inline-block;padding:7px;margin:3px;background:#292929;color:var(--orange);border-radius:8px">${x}</span>`
-        ).join("");
+function startCrash(){
+  if(!hasAccess("crash")){requestGame("crash");return}if(crashRunning)return;
+  crashRunning=true;let current=1;const target=1+Math.random()*8;
+  const value=document.getElementById("crash-value"),status=document.getElementById("crash-status"),button=document.getElementById("crash-button");
+  button.disabled=true;button.textContent="РАУНД ИДЁТ";status.textContent="Идёт игровой раунд...";
+  crashTimer=setInterval(()=>{
+    current+=.025+current*.009;value.textContent=current.toFixed(2)+"x";
+    if(current>=target){
+      clearInterval(crashTimer);crashRunning=false;button.disabled=false;button.textContent="ЗАПУСТИТЬ СНОВА";
+      value.textContent=target.toFixed(2)+"x";status.textContent="Раунд завершён";
+      crashHistory.unshift(target.toFixed(2)+"x");crashHistory=crashHistory.slice(0,8);
+      document.getElementById("crash-history").innerHTML=crashHistory.map(x=>`<span style="display:inline-block;padding:7px;margin:3px;background:#292929;color:var(--orange);border-radius:8px">${x}</span>`).join("");
     }
-  }, 50);
+  },50);
 }
 
-// Загрузка матчей
-async function loadMatches() {
-  const el = document.getElementById("matches-list");
-  el.textContent = "Загружаем матчи...";
+function connectBlackjackSession(){
+  if(!hasAccess("blackjack")){requestGame("blackjack");return}
+  if(blackjackSessionConnected)return;
+  blackjackSessionConnected=true;
+  const status=document.getElementById("blackjack-session-status"),connectButton=document.getElementById("blackjack-connect-button"),outcomeButton=document.getElementById("blackjack-outcome-button");
+  status.innerHTML='<b style="color:#43d58a">ИНТЕРФЕЙС АКТИВЕН</b><div class="muted">Реальная игровая сессия не подключена.</div>';
+  connectButton.textContent="✓ ИНТЕРФЕЙС АКТИВЕН";connectButton.style.background="#176b43";connectButton.style.color="#fff";connectButton.disabled=true;outcomeButton.disabled=false;
+}
+function formBlackjackOutcome(){
+  if(!blackjackSessionConnected)return;
+  const outcomes=["ПОБЕДА ИГРОКА","ПОБЕДА ДИЛЕРА"],result=outcomes[Math.floor(Math.random()*outcomes.length)];
+  document.getElementById("blackjack-result").innerHTML=`<div class="result"><div class="muted" style="text-align:center">РЕЗУЛЬТАТ</div><strong>${result}</strong><div class="muted" style="text-align:center">Случайный результат, не прогноз реальной игры.</div></div>`;
+}
 
-  try {
-    const response = await fetch("/api/matches");
-    if (!response.ok) throw new Error();
-
-    const data = await response.json();
-
-    const events = Array.isArray(data)
-      ? data
-      : Array.isArray(data?.events)
-        ? data.events
-        : [];
-
-    if (!events.length) {
-      el.textContent = "На данный момент событий нет.";
-      return;
-    }
-
-    el.innerHTML = events.slice(0, 30).map(e => {
-      const home = e.strHomeTeam || e.homeTeam || e.home || "Команда 1";
-      const away = e.strAwayTeam || e.awayTeam || e.away || "Команда 2";
-      const date = e.dateEvent || e.date || "";
-
-      return `
-        <div class="result-row">
-          <div>
-            <b>${escapeHTML(home)} — ${escapeHTML(away)}</b>
-            <div class="muted">${escapeHTML(date)}</div>
-          </div>
-          ⚽
-        </div>
-      `;
+async function loadMatches(){
+  const el=document.getElementById("matches-list");el.textContent="Загружаем матчи...";
+  try{
+    const response=await fetch("/api/matches");if(!response.ok)throw new Error("HTTP "+response.status);
+    const data=await response.json();
+    const events=Array.isArray(data)?data:Array.isArray(data?.events)?data.events:[];
+    if(!events.length){el.textContent="На данный момент событий нет.";return}
+    el.innerHTML=events.slice(0,30).map(e=>{
+      const home=e.strHomeTeam||e.homeTeam||e.home||"Команда 1",away=e.strAwayTeam||e.awayTeam||e.away||"Команда 2",date=e.dateEvent||e.date||"";
+      return `<div class="result-row"><div><b>${escapeHTML(home)} — ${escapeHTML(away)}</b><div class="muted">${escapeHTML(date)}</div></div>⚽</div>`;
     }).join("");
-
-  } catch (e) {
-    el.textContent = "Не удалось загрузить матчи. Попробуйте позже.";
-  }
+  }catch(e){el.textContent="Не удалось загрузить матчи. Попробуйте позже."}
 }
-
-// Первоначальная загрузка
-loadMatches();
-updateProfile();
-renderSlotHistory();
+loadMatches();updateProfile();renderSlotHistory();
 </script>
-
 </body>
 </html>
