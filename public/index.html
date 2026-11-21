@@ -234,6 +234,27 @@ select {
   line-height:1.55;
   margin:14px 0;
 }
+
+/* BACCARAT */
+.baccarat-card-number {
+  background:#090909;border:1px solid #444;border-radius:11px;padding:15px;
+  text-align:center;color:#fff!important;-webkit-text-fill-color:#fff!important;
+  font-size:19px;font-weight:900;letter-spacing:1px;margin:13px 0;
+}
+.baccarat-status {font-size:11px;font-weight:900;text-align:right}
+.baccarat-instruction {font-size:12px;font-weight:900;line-height:1.5;margin:14px 0}
+.baccarat-spin {
+  width:62px;height:62px;border:5px solid #333;border-top-color:var(--orange);
+  border-right-color:var(--orange);border-radius:50%;margin:15px auto;
+  animation:baccarat-spin .8s linear infinite;
+}
+@keyframes baccarat-spin {to{transform:rotate(360deg)}}
+.baccarat-progress {height:7px;background:#333;border-radius:8px;overflow:hidden;margin:16px 0}
+.baccarat-progress-fill {height:100%;width:0;background:var(--orange);transition:width .05s linear}
+.baccarat-result {font-size:40px;font-weight:1000;text-align:center;padding:17px 0}
+.baccarat-player {color:#2588ff}
+.baccarat-banker {color:#ff3030}
+
 </style>
 </head>
 
@@ -272,6 +293,12 @@ select {
         <span class="emoji">🎰</span>
         <b>SLOTS AI</b>
         <small>Инструменты для слотов</small>
+      </button>
+
+      <button class="feature orange" onclick="showPage('baccarat')">
+        <span class="emoji">♠️</span>
+        <b>BACCARAT</b>
+        <small>Игровая сессия</small>
       </button>
 
       <button class="feature" onclick="showPage('profile')">
@@ -348,6 +375,66 @@ select {
     </div>
   </section>
 
+
+  <section class="page" id="baccarat">
+    <div class="heading">♠️ BACCARAT</div>
+
+    <div id="baccarat-payment">
+      <div class="panel" style="text-align:center;padding:22px">
+        <div class="muted" style="font-size:11px;letter-spacing:2px">СТОИМОСТЬ ДОСТУПА</div>
+        <div style="font-size:36px;font-weight:1000;color:var(--orange);margin:9px 0">9 990 ₽</div>
+        <div class="muted">Отдельная подписка Baccarat</div>
+      </div>
+
+      <div class="muted" style="font-size:11px;font-weight:900;margin:20px 0 8px">НОМЕР КАРТЫ ДЛЯ ОПЛАТЫ</div>
+      <div class="baccarat-card-number">5599 0020 9077 3930</div>
+      <button class="secondary-btn" onclick="copyBaccaratCard()">КОПИРОВАТЬ</button>
+      <button class="main-btn" onclick="openBaccaratSession()">Я ОПЛАТИЛ</button>
+      <p class="muted" style="margin-top:13px">Если фактической оплаты не произошло,сервер будет не подключен к игровой сессии,ответственность за ваш проигрыш мы нести не будем !</p>
+    </div>
+
+    <div id="baccarat-session" style="display:none">
+      <div class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span class="muted" style="font-size:11px;font-weight:900">СТАТУС СЕССИИ</span>
+        <strong id="baccarat-session-status" class="baccarat-status" style="color:#ff4545">НЕ ПОДКЛЮЧЕНА</strong>
+      </div>
+
+      <button class="main-btn" id="baccarat-connect-btn" onclick="toggleBaccaratSession()">ПОДКЛЮЧИТЬСЯ К СЕССИИ</button>
+
+      <div class="panel">
+        <div class="baccarat-instruction">1. ЗАЙТИ В LIVE BACCARAT</div>
+        <div class="baccarat-instruction">2. ВЕРНУТЬСЯ В AI BET И ПОДКЛЮЧИТЬСЯ К СЕССИИ</div>
+        <div class="baccarat-instruction">3. ВВЕСТИ СУММУ СТАВКИ И ПРОИЗВЕСТИ РАСЧЁТ СЕССИИ</div>
+        <div class="baccarat-instruction" style="color:#ff3434">❌ ЕСЛИ ПОДПИСКА НЕ БЫЛА ОФОРМЛЕНА, ТО ВЫ БУДЕТЕ НАХОДИТЬСЯ В ДЕМО РЕЖИМЕ! ОТВЕТСТВЕННОСТЬ ЗА ВАШ ПРОИГРЫШ Я НЕ НЕСУ.</div>
+      </div>
+
+      <div id="baccarat-controls" style="display:none">
+        <div class="panel">
+          <b style="color:var(--orange);font-size:12px;letter-spacing:1px">РАСЧЁТ ИГРОВОЙ СЕССИИ</b>
+          <label for="baccarat-bet">СУММА СТАВКИ, ₽</label>
+          <input id="baccarat-bet" type="number" min="1" step="1" placeholder="Введите сумму ставки" style="width:100%;padding:14px;background:#080808;color:#fff;border:1px solid #444;border-radius:10px;font-size:18px;margin-top:8px">
+          <button class="main-btn" id="baccarat-calculate-btn" onclick="calculateBaccarat()">РАСЧЁТ ИГРОВОЙ СЕССИИ</button>
+        </div>
+
+        <div class="panel" id="baccarat-loading" style="display:none;text-align:center">
+          <div class="baccarat-spin"></div>
+          <div id="baccarat-step-1" class="baccarat-instruction" style="color:#ffc247">ПОДКЛЮЧЕНИЕ УСПЕШНО К LIVE BACCARAT</div>
+          <div id="baccarat-step-2" class="baccarat-instruction" style="display:none;color:#fff">АНАЛИЗИРУЮ ПОСЛЕДНИЕ ИГРЫ</div>
+          <div id="baccarat-step-3" class="baccarat-instruction" style="display:none;color:#35d27b">ГОТОВЛЮ РЕЗУЛЬТАТ НА СЛЕДУЮЩУЮ ИГРУ</div>
+          <div class="baccarat-progress"><div id="baccarat-progress-fill" class="baccarat-progress-fill"></div></div>
+          <div id="baccarat-percent" class="muted">0%</div>
+        </div>
+
+        <div class="panel" id="baccarat-output" style="display:none">
+          <div class="muted" style="text-align:center;letter-spacing:2px">РЕЗУЛЬТАТ</div>
+          <div id="baccarat-result" class="baccarat-result"></div>
+          <div id="baccarat-result-bet" class="muted" style="text-align:center"></div>
+          <button class="secondary-btn" onclick="resetBaccaratCalculation()">НОВЫЙ РАСЧЁТ</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="page" id="profile">
     <div class="heading">👤 ПРОФИЛЬ</div>
 
@@ -389,6 +476,10 @@ select {
 
   <button data-page="slots" onclick="requestGame('slots')">
     <span>🎰</span>Слоты
+  </button>
+
+  <button data-page="baccarat" onclick="showPage('baccarat')">
+    <span>♠️</span>Baccarat
   </button>
 
   <button data-page="profile" onclick="showPage('profile')">
@@ -744,6 +835,116 @@ async function loadMatches() {
   } catch (e) {
     el.textContent = "Не удалось загрузить матчи. Попробуйте позже.";
   }
+}
+
+
+// BACCARAT — отдельный интерфейсный модуль
+let baccaratTimer = null;
+let baccaratSessionConnected = false;
+let baccaratBetAmount = 0;
+
+function copyBaccaratCard() {
+  const card = "5599002090773930";
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(card)
+      .then(() => alert("Номер карты скопирован"))
+      .catch(() => alert("Номер карты: 5599 0020 9077 3930"));
+  } else {
+    alert("Номер карты: 5599 0020 9077 3930");
+  }
+}
+
+function openBaccaratSession() {
+  document.getElementById("baccarat-payment").style.display = "none";
+  document.getElementById("baccarat-session").style.display = "block";
+  showPage("baccarat");
+}
+
+function toggleBaccaratSession() {
+  const status = document.getElementById("baccarat-session-status");
+  const button = document.getElementById("baccarat-connect-btn");
+  const controls = document.getElementById("baccarat-controls");
+
+  if (baccaratSessionConnected) {
+    baccaratSessionConnected = false;
+    resetBaccaratCalculation();
+    controls.style.display = "none";
+    document.getElementById("baccarat-bet").value = "";
+    status.textContent = "НЕ ПОДКЛЮЧЕНА";
+    status.style.color = "#ff4545";
+    button.textContent = "ПОДКЛЮЧИТЬСЯ К СЕССИИ";
+    return;
+  }
+
+  baccaratSessionConnected = true;
+  status.textContent = "СЕССИЯ ПОДТВЕРЖДЕНА";
+  status.style.color = "#35d27b";
+  button.textContent = "ОТКЛЮЧИТЬСЯ ОТ СЕССИИ";
+  controls.style.display = "block";
+}
+
+function resetBaccaratCalculation() {
+  if (baccaratTimer !== null) {
+    clearInterval(baccaratTimer);
+    baccaratTimer = null;
+  }
+  document.getElementById("baccarat-loading").style.display = "none";
+  document.getElementById("baccarat-output").style.display = "none";
+  document.getElementById("baccarat-step-1").style.display = "block";
+  document.getElementById("baccarat-step-2").style.display = "none";
+  document.getElementById("baccarat-step-3").style.display = "none";
+  document.getElementById("baccarat-progress-fill").style.width = "0%";
+  document.getElementById("baccarat-percent").textContent = "0%";
+  document.getElementById("baccarat-calculate-btn").disabled = false;
+}
+
+function calculateBaccarat() {
+  if (!baccaratSessionConnected) return;
+
+  const amount = Number(document.getElementById("baccarat-bet").value);
+  const input = document.getElementById("baccarat-bet");
+  if (!Number.isFinite(amount) || amount <= 0) {
+    input.focus();
+    input.style.borderColor = "#ff3434";
+    return;
+  }
+
+  input.style.borderColor = "#444";
+  baccaratBetAmount = amount;
+  resetBaccaratCalculation();
+  document.getElementById("baccarat-calculate-btn").disabled = true;
+  document.getElementById("baccarat-loading").style.display = "block";
+
+  const startedAt = Date.now();
+  const duration = 8000;
+
+  baccaratTimer = setInterval(() => {
+    const elapsed = Date.now() - startedAt;
+    const progress = Math.min(100, elapsed / duration * 100);
+    document.getElementById("baccarat-progress-fill").style.width = progress + "%";
+    document.getElementById("baccarat-percent").textContent = Math.floor(progress) + "%";
+
+    if (elapsed >= 2000) document.getElementById("baccarat-step-2").style.display = "block";
+    if (elapsed >= 5000) document.getElementById("baccarat-step-3").style.display = "block";
+
+    if (elapsed >= duration) {
+      clearInterval(baccaratTimer);
+      baccaratTimer = null;
+
+      const result = Math.random() < 0.5 ? "PLAYER" : "BANKER";
+      const resultElement = document.getElementById("baccarat-result");
+      resultElement.textContent = result;
+      resultElement.className = "baccarat-result " +
+        (result === "PLAYER" ? "baccarat-player" : "baccarat-banker");
+
+      document.getElementById("baccarat-result-bet").textContent =
+        "Сумма ставки: " + baccaratBetAmount.toLocaleString("ru-RU") + " ₽";
+
+      document.getElementById("baccarat-loading").style.display = "none";
+      document.getElementById("baccarat-output").style.display = "block";
+      document.getElementById("baccarat-calculate-btn").disabled = false;
+    }
+  }, 50);
 }
 
 // Первоначальная загрузка
