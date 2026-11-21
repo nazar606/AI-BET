@@ -255,6 +255,9 @@ select {
 .baccarat-player {color:#2588ff}
 .baccarat-banker {color:#ff3030}
 
+
+.back-page-btn{display:inline-flex;align-items:center;gap:8px;background:#171717;color:#fff;border:1px solid #393939;border-radius:10px;padding:10px 15px;font-weight:800;font-size:12px;letter-spacing:.5px;margin:0 0 14px;cursor:pointer}
+.back-page-btn:active{transform:scale(.98)}
 </style>
 </head>
 
@@ -310,6 +313,7 @@ select {
   </section>
 
   <section class="page" id="matches">
+    <button class="back-page-btn" onclick="goBack()">← НАЗАД</button>
     <div class="heading">⚽ СПОРТИВНЫЕ МАТЧИ</div>
     <div class="panel">
       <div id="matches-list" class="muted">Загрузка матчей...</div>
@@ -318,6 +322,7 @@ select {
   </section>
 
   <section class="page" id="crash">
+    <button class="back-page-btn" onclick="goBack()">← НАЗАД</button>
     <div class="heading">🚀 CRASH</div>
 
     <div class="panel">
@@ -338,6 +343,7 @@ select {
   </section>
 
   <section class="page" id="slots">
+    <button class="back-page-btn" onclick="goBack()">← НАЗАД</button>
     <div class="heading">🎰 SLOTS AI</div>
 
     <div class="panel">
@@ -377,6 +383,7 @@ select {
 
 
   <section class="page" id="baccarat">
+    <button class="back-page-btn" onclick="baccaratGoBack()">← НАЗАД</button>
     <div class="heading">♠️ BACCARAT</div>
 
     <div id="baccarat-payment">
@@ -436,6 +443,7 @@ select {
   </section>
 
   <section class="page" id="profile">
+    <button class="back-page-btn" onclick="goBack()">← НАЗАД</button>
     <div class="heading">👤 ПРОФИЛЬ</div>
 
     <div class="panel">
@@ -541,14 +549,48 @@ function hasAccess(game) {
   return localStorage.getItem(ACCESS_KEYS[game]) === "true";
 }
 
+// История переходов между разделами — для кнопки «Назад»
+const pageHistory = [];
+let currentPage = "home";
+
+function goBack() {
+  // Убираем текущий экран и возвращаем предыдущий доступный
+  while (pageHistory.length) {
+    const previous = pageHistory.pop();
+    if (previous && previous !== currentPage) {
+      showPage(previous, false);
+      return;
+    }
+  }
+  showPage("home", false);
+}
+
+function baccaratGoBack() {
+  const payment = document.getElementById("baccarat-payment");
+  const session = document.getElementById("baccarat-session");
+  if (session.style.display !== "none") {
+    // Возврат с экрана сессии на предыдущий экран оплаты
+    if (baccaratTimer !== null) {
+      clearInterval(baccaratTimer);
+      baccaratTimer = null;
+    }
+    session.style.display = "none";
+    payment.style.display = "block";
+    return;
+  }
+  goBack();
+}
+
 // Открытие страниц
-function showPage(page) {
+function showPage(page, remember = true) {
   if (page === "crash" || page === "slots") {
     if (!hasAccess(page)) {
       requestGame(page);
       return;
     }
   }
+
+  if (remember && page !== currentPage) pageHistory.push(currentPage);
 
   document.querySelectorAll(".page").forEach(x => {
     x.classList.remove("active");
@@ -557,6 +599,7 @@ function showPage(page) {
   const target = document.getElementById(page);
   if (!target) return;
 
+  currentPage = page;
   target.classList.add("active");
 
   document.querySelectorAll(".nav button").forEach(x => {
