@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI BET</title>
-<script src="https://telegram.org/js/telegram-web-app.js">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
 // AI BET intro and rotating main-menu phrases. Existing game/payment logic is untouched.
 (function initAIBetShell() {
   const splash = document.getElementById('aibet-splash');
@@ -28,7 +29,7 @@
     }
   }, 4500);
 })();
-\n</script>
+</script>
 
 <style>
 :root {
@@ -436,10 +437,75 @@ body {
 .home-game b { display:block; color:#fff; font-size:17px; letter-spacing:1.8px; }
 .home-game small { display:block; color:#8294ad; font-size:11px; margin-top:7px; }
 .home-footer { text-align:center; color:#637b9b; font-size:9px; letter-spacing:2px; margin:26px 0 12px; }
-\n</style>
+
+/* Matte black / matte blue palette for inner game and payment screens only */
+:root {
+  --orange:#4d8edb;
+  --gold:#8fb9ed;
+  --orange-glow:rgba(65,132,205,.20);
+  --orange-soft:rgba(65,132,205,.09);
+  --bg:#070a10;
+  --panel:#101722;
+}
+body { padding-bottom:0 !important; }
+body::before {
+  background:
+    radial-gradient(circle at 12% 28%, rgba(55,112,178,.055), transparent 27%),
+    radial-gradient(circle at 88% 66%, rgba(55,112,178,.035), transparent 25%);
+}
+/* Keep the splash and home exactly in their approved blue treatment. */
+#home .home-brand span { color:#579bff; }
+/* Inner screens and payment surfaces use restrained matte blue accents. */
+.page:not(#home) .panel,
+.page:not(#home) .welcome,
+#payment-modal .modal {
+  border-color:#263b56;
+  background-color:#101722;
+}
+.page:not(#home) .main-btn,
+#payment-modal .main-btn {
+  background:linear-gradient(110deg,#244d79,#183653);
+  border-color:#426f9f;
+  color:#f2f7ff;
+  box-shadow:0 5px 16px rgba(47,111,177,.16);
+}
+.page:not(#home) .main-btn:hover,
+#payment-modal .main-btn:hover { box-shadow:0 7px 22px rgba(47,111,177,.24); }
+.page:not(#home) .secondary-btn,
+.page:not(#home) .back-page-btn,
+#payment-modal .secondary-btn {
+  background:#111a27;
+  border-color:#304967;
+  color:#e4efff;
+}
+.page:not(#home) .secondary-btn:hover,
+.page:not(#home) .back-page-btn:hover { border-color:#548fdf; background:#17263a; }
+.page:not(#home) input,
+.page:not(#home) select,
+#payment-modal .card-number {
+  background:#080d15 !important;
+  border-color:#304967 !important;
+  color:#f1f6ff !important;
+}
+.page:not(#home) input:focus,
+.page:not(#home) select:focus {
+  border-color:#579bff !important;
+  box-shadow:0 0 0 3px rgba(87,155,255,.12) !important;
+}
+.page:not(#home) .heading,
+.page:not(#home) label,
+#payment-modal h2 { color:#e8f1ff; }
+#payment-modal .modal { border:1px solid #263b56; }
+#payment-modal .price { color:#8fb9ed; }
+#payment-modal .close { color:#d9e8fb; }
+/* Preserve the original Baccarat PLAYER/BANKER result colors and CRASH end-of-round red state. */
+.baccarat-player { color:#2588ff !important; }
+.baccarat-banker { color:#ff3030 !important; }
+
+</style>
 </head>
 
-<body>\n
+<body>
 <div id="aibet-splash" aria-label="AI BET intro">
   <div class="splash-logo">AI <span>BET</span></div>
 </div>
@@ -632,31 +698,7 @@ body {
 
 </div>
 
-<nav class="nav">
-  <button class="active" data-page="home" onclick="showPage('home')">
-    <span>🏠</span>Главная
-  </button>
 
-  <button data-page="matches" onclick="showPage('matches')">
-    <span>⚽</span>Матчи
-  </button>
-
-  <button data-page="crash" onclick="requestGame('crash')">
-    <span>🚀</span>CRASH
-  </button>
-
-  <button data-page="slots" onclick="requestGame('slots')">
-    <span>🎰</span>Слоты
-  </button>
-
-  <button data-page="baccarat" onclick="showPage('baccarat')">
-    <span>♠️</span>Baccarat
-  </button>
-
-  <button data-page="profile" onclick="showPage('profile')">
-    <span>👤</span>Профиль
-  </button>
-</nav>
 
 <div class="modal-bg" id="payment-modal">
   <div class="modal">
